@@ -108,7 +108,7 @@ app.include_router(notifications.router, prefix=settings.API_PREFIX, tags=["Noti
 # Mount static files (webapp demo + flutter build)
 static_dir = Path(__file__).parent.parent / "static"
 if static_dir.exists():
-    app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
+    app.mount("/static", StaticFiles(directory=str(static_dir), html=True), name="static")
     print(f"📁 Static files mounted from: {static_dir}")
 else:
     print(f"⚠️  Static directory not found: {static_dir}")
