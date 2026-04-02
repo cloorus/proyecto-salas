@@ -333,10 +333,21 @@ cat documentacion/requerimientos_proyecto.md
 
 ## 🔗 Recursos
 
-- **Repo GitHub:** https://github.com/cmena92/proyecto-salas
+- **Repo GitHub:** https://github.com/cloorus/proyecto-salas
 - **API Docs:** http://157.245.1.231:8000/docs
 - **Flutter Web:** http://157.245.1.231:8080
 - **WebApp Demo:** http://157.245.1.231:8000/static/test-app/
+
+---
+
+## ⚠️ Nota sobre repos antiguos
+
+Los siguientes repos fueron consolidados en este monorepo y **NO deben usarse más**:
+- ~~`cmena92/antigravity_app`~~ → ahora `proyecto-salas/flutter-app/`
+- ~~`cmena92/vita-api`~~ → ahora `proyecto-salas/backend-api/`
+- ~~`cmena92/app_bgnius_instalador`~~ → ahora `proyecto-salas/app-instalador/`
+
+Se recomienda archivarlos en GitHub para evitar confusión.
 
 ---
 
