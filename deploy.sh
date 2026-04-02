@@ -40,7 +40,7 @@ echo ""
 case "$TARGET" in
     backend)
         echo "♻️  Restarting backend API..."
-        ssh $SERVER "cd $REMOTE_PATH/backend-api && docker-compose restart api"
+        ssh $SERVER "docker restart vita-api-api-1"
         echo "✅ Backend restarted"
         ;;
     webapp)
