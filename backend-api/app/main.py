@@ -3,9 +3,11 @@
 import asyncio
 from datetime import datetime
 from contextlib import asynccontextmanager
+from pathlib import Path
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 from .config import settings
 from .database import init_db, close_db
@@ -102,6 +104,14 @@ app.include_router(device_actions.router, prefix=settings.API_PREFIX, tags=["Dev
 app.include_router(groups.router, prefix=settings.API_PREFIX, tags=["Groups"])
 app.include_router(events.router, prefix=settings.API_PREFIX, tags=["Events"])
 app.include_router(notifications.router, prefix=settings.API_PREFIX, tags=["Notifications"])
+
+# Mount static files (webapp demo + flutter build)
+static_dir = Path(__file__).parent.parent / "static"
+if static_dir.exists():
+    app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
+    print(f"📁 Static files mounted from: {static_dir}")
+else:
+    print(f"⚠️  Static directory not found: {static_dir}")
 
 
 @app.exception_handler(HTTPException)
