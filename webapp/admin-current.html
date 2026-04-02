@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BGnius VITA - Panel de Administración</title>
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        navy: { DEFAULT: '#1a1a2e', light: '#16213e', lighter: '#0f3460' },
+        accent: { DEFAULT: '#6c5ce7', light: '#a29bfe', dark: '#5a4bd1' }
+      }
+    }
+  }
+}
+</script>
+<style>
+[v-cloak] { display: none; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+.sidebar-link { transition: all 0.15s; }
+.sidebar-link:hover, .sidebar-link.active { background: rgba(108,92,231,0.2); border-left: 3px solid #6c5ce7; }
+.fade-enter-active, .fade-leave-active { transition: opacity 0.2s; }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #1a1a2e; }
+::-webkit-scrollbar-thumb { background: #6c5ce7; border-radius: 3px; }
+.stat-card { transition: transform 0.2s; }
+.stat-card:hover { transform: translateY(-2px); }
+.modal { backdrop-filter: blur(5px); }
+</style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+<div id="app" v-cloak>
+
+<!-- LOGIN -->
+<div v-if="!token" class="min-h-screen flex items-center justify-center bg-navy">
+  <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md">
+    <div class="text-center mb-6">
+      <div class="text-4xl mb-2">🔐</div>
+      <h1 class="text-2xl font-bold text-navy">BGnius VITA</h1>
+      <p class="text-gray-500 text-sm">Panel de Administración</p>
+    </div>
+    <form @submit.prevent="login">
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Correo electrónico</label>
+        <input v-model="loginForm.email" type="email" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent" placeholder="admin@bgnius.com">
+      </div>
+      <div class="mb-6">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
+        <input v-model="loginForm.password" type="password" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent">
+      </div>
+      <div v-if="loginError" class="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{{ loginError }}</div>
+      <button type="submit" :disabled="loginLoading" class="w-full bg-accent hover:bg-accent-dark text-white font-semibold py-2.5 rounded-lg transition">
+        {{ loginLoading ? 'Ingresando...' : 'Iniciar Sesión' }}
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div v-else class="flex min-h-screen">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-navy text-white flex-shrink-0 flex flex-col fixed h-full z-30" :class="{ '-translate-x-full': !sidebarOpen, 'translate-x-0': sidebarOpen }" style="transition: transform 0.2s">
+    <div class="p-4 border-b border-white/10">
+      <h1 class="text-xl font-bold">🏠 BGnius VITA</h1>
+      <p class="text-xs text-gray-400 mt-1">Panel de Administración</p>
+    </div>
+    <nav class="flex-1 py-2 overflow-y-auto">
+      <a v-for="item in menuItems" :key="item.id" @click="currentPage=item.id; sidebarOpen=window.innerWidth>768"
+         class="sidebar-link flex items-center gap-3 px-4 py-2.5 cursor-pointer text-sm" :class="{ active: currentPage===item.id }">
+        <span class="text-lg">{{ item.icon }}</span>
+        <span>{{ item.label }}</span>
+      </a>
+    </nav>
+    <div class="p-4 border-t border-white/10">
+      <div class="text-xs text-gray-400 mb-2">{{ userEmail }}</div>
+      <button @click="logout" class="text-xs text-red-400 hover:text-red-300">🚪 Cerrar Sesión</button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="flex-1 ml-64">
+    <!-- Top bar -->
+    <header class="bg-white shadow-sm px-6 py-3 flex items-center justify-between sticky top-0 z-20">
+      <button @click="sidebarOpen=!sidebarOpen" class="lg:hidden text-gray-600 text-xl">☰</button>
+      <h2 class="text-lg font-semibold text-gray-800">{{ currentPageTitle }}</h2>
+      <div class="flex items-center gap-3">
+        <span class="text-xs px-2 py-1 rounded-full" :class="health.status==='healthy'?'bg-green-100 text-green-700':'bg-yellow-100 text-yellow-700'">
+          {{ health.status==='healthy'?'🟢 Online':'🟡 Degradado' }}
+        </span>
+      </div>
+    </header>
+
+    <div class="p-6">
+
+      <!-- DASHBOARD -->
+      <div v-if="currentPage==='dashboard'">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div class="stat-card bg-white rounded-xl p-5 shadow-sm">
+            <div class="text-2xl mb-1">📱</div>
+            <div class="text-sm text-gray-600 mb-1">Dispositivos</div>
+            <div class="text-2xl font-bold text-gray-800">{{ devices.length }}</div>
+          </div>
+          <div class="stat-card bg-white rounded-xl p-5 shadow-sm">
+            <div class="text-2xl mb-1">👥</div>
+            <div class="text-sm text-gray-600 mb-1">Usuarios</div>
+            <div class="text-2xl font-bold text-gray-800">{{ users.length }}</div>
+          </div>
+          <div class="stat-card bg-white rounded-xl p-5 shadow-sm">
+            <div class="text-2xl mb-1">👷</div>
+            <div class="text-sm text-gray-600 mb-1">Instaladores</div>
+            <div class="text-2xl font-bold text-gray-800">{{ installers.length }}</div>
+          </div>
+          <div class="stat-card bg-white rounded-xl p-5 shadow-sm">
+            <div class="text-2xl mb-1">🔑</div>
+            <div class="text-sm text-gray-600 mb-1">Activaciones</div>
+            <div class="text-2xl font-bold text-gray-800">{{ activations.length }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INSTALLERS -->
+      <div v-if="currentPage==='installers'">
+        <div class="bg-white rounded-xl p-5 shadow-sm">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-semibold text-gray-800">Gestión de Instaladores</h3>
+            <button @click="showAddInstaller" class="bg-accent hover:bg-accent-dark text-white px-4 py-2 rounded-lg text-sm">
+              ➕ Agregar Instalador
+            </button>
+          </div>
+          <div class="mb-4">
+            <input v-model="installerSearch" placeholder="Buscar instaladores..." 
+              class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent">
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b">
+                  <th class="text-left py-2">ID</th>
+                  <th class="text-left py-2">Identificación</th>
+                  <th class="text-left py-2">Nombre</th>
+                  <th class="text-left py-2">Email</th>
+                  <th class="text-left py-2">País</th>
+                  <th class="text-left py-2">Estado</th>
+                  <th class="text-left py-2">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="installer in filteredInstallers" :key="installer.id" class="border-b hover:bg-gray-50">
+                  <td class="py-2">{{ installer.id }}</td>
+                  <td class="py-2">{{ installer.identify }}</td>
+                  <td class="py-2 font-medium">{{ installer.name }}</td>
+                  <td class="py-2">{{ installer.email }}</td>
+                  <td class="py-2">{{ installer.country_name || 'N/A' }}</td>
+                  <td class="py-2">
+                    <span :class="installer.is_active ? 'text-green-600 bg-green-100' : 'text-red-600 bg-red-100'" 
+                      class="px-2 py-1 rounded-full text-xs">
+                      {{ installer.is_active ? 'Activo' : 'Inactivo' }}
+                    </span>
+                  </td>
+                  <td class="py-2">
+                    <button @click="editInstaller(installer)" class="text-blue-600 hover:bg-blue-50 px-2 py-1 rounded text-xs mr-1">Editar</button>
+                    <button @click="confirmDelete('installer', installer)" class="text-red-600 hover:bg-red-50 px-2 py-1 rounded text-xs">Eliminar</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ENGINES -->
+      <div v-if="currentPage==='engines'">
+        <div class="bg-white rounded-xl p-5 shadow-sm">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-semibold text-gray-800">Gestión de Motores</h3>
+            <button @click="showAddEngine" class="bg-accent hover:bg-accent-dark text-white px-4 py-2 rounded-lg text-sm">
+              ➕ Agregar Motor
+            </button>
+          </div>
+          <div class="mb-4">
+            <input v-model="engineSearch" placeholder="Buscar motores..." 
+              class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent">
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b">
+                  <th class="text-left py-2">ID</th>
+                  <th class="text-left py-2">Modelo</th>
+                  <th class="text-left py-2">Tipo</th>
+                  <th class="text-left py-2">Marca</th>
+                  <th class="text-left py-2">PCB</th>
+                  <th class="text-left py-2">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="engine in filteredEngines" :key="engine.id" class="border-b hover:bg-gray-50">
+                  <td class="py-2">{{ engine.id }}</td>
+                  <td class="py-2 font-medium">{{ engine.model }}</td>
+                  <td class="py-2">{{ engine.engine_type_name || 'N/A' }}</td>
+                  <td class="py-2">{{ engine.brand || 'N/A' }}</td>
+                  <td class="py-2">{{ engine.pcb || 'N/A' }}</td>
+                  <td class="py-2">
+                    <button @click="editEngine(engine)" class="text-blue-600 hover:bg-blue-50 px-2 py-1 rounded text-xs mr-1">Editar</button>
+                    <button @click="confirmDelete('engine', engine)" class="text-red-600 hover:bg-red-50 px-2 py-1 rounded text-xs">Eliminar</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ENGINE TYPES -->
+      <div v-if="currentPage==='engine-types'">
+        <div class="bg-white rounded-xl p-5 shadow-sm">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-semibold text-gray-800">Tipos de Motor</h3>
+            <button @click="showAddEngineType" class="bg-accent hover:bg-accent-dark text-white px-4 py-2 rounded-lg text-sm">
+              ➕ Agregar Tipo
+            </button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b">
+                  <th class="text-left py-2">ID</th>
+                  <th class="text-left py-2">Nombre</th>
+                  <th class="text-left py-2">Creado</th>
+                  <th class="text-left py-2">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="type in engineTypes" :key="type.id" class="border-b hover:bg-gray-50">
+                  <td class="py-2">{{ type.id }}</td>
+                  <td class="py-2 font-medium">{{ type.name }}</td>
+                  <td class="py-2">{{ formatDate(type.created_at) }}</td>
+                  <td class="py-2">
+                    <button @click="editEngineType(type)" class="text-blue-600 hover:bg-blue-50 px-2 py-1 rounded text-xs mr-1">Editar</button>
+                    <button @click="confirmDelete('engine-type', type)" class="text-red-600 hover:bg-red-50 px-2 py-1 rounded text-xs">Eliminar</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTIVATIONS -->
+      <div v-if="currentPage==='activations'">
+        <div class="bg-white rounded-xl p-5 shadow-sm">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-semibold text-gray-800">Activaciones de Dispositivos</h3>
+            <button @click="showAddActivation" class="bg-accent hover:bg-accent-dark text-white px-4 py-2 rounded-lg text-sm">
+              ➕ Nueva Activación
+            </button>
+          </div>
+          <div class="mb-4">
+            <input v-model="activationSearch" placeholder="Buscar activaciones..." 
+              class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent">
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b">
+                  <th class="text-left py-2">ID</th>
+                  <th class="text-left py-2">Instalador</th>
+                  <th class="text-left py-2">Motor</th>
+                  <th class="text-left py-2">Serial VITA</th>
+                  <th class="text-left py-2">Fecha</th>
+                  <th class="text-left py-2">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="activation in filteredActivations" :key="activation.id" class="border-b hover:bg-gray-50">
+                  <td class="py-2">{{ activation.id }}</td>
+                  <td class="py-2 font-medium">{{ activation.installer_name }}</td>
+                  <td class="py-2">{{ activation.engine_model }}</td>
+                  <td class="py-2">{{ activation.vita_serial || 'N/A' }}</td>
+                  <td class="py-2">{{ formatDate(activation.activation_date) }}</td>
+                  <td class="py-2">
+                    <button @click="editActivation(activation)" class="text-blue-600 hover:bg-blue-50 px-2 py-1 rounded text-xs mr-1">Editar</button>
+                    <button @click="confirmDelete('activation', activation)" class="text-red-600 hover:bg-red-50 px-2 py-1 rounded text-xs">Eliminar</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- COUNTRIES -->
+      <div v-if="currentPage==='countries'">
+        <div class="bg-white rounded-xl p-5 shadow-sm">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-semibold text-gray-800">Países</h3>
+            <button @click="showAddCountry" class="bg-accent hover:bg-accent-dark text-white px-4 py-2 rounded-lg text-sm">
+              ➕ Agregar País
+            </button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b">
+                  <th class="text-left py-2">ID</th>
+                  <th class="text-left py-2">Nombre</th>
+                  <th class="text-left py-2">Código Regional</th>
+                  <th class="text-left py-2">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="country in countries" :key="country.id" class="border-b hover:bg-gray-50">
+                  <td class="py-2">{{ country.id }}</td>
+                  <td class="py-2 font-medium">{{ country.name }}</td>
+                  <td class="py-2">{{ country.region_code || 'N/A' }}</td>
+                  <td class="py-2">
+                    <button @click="editCountry(country)" class="text-blue-600 hover:bg-blue-50 px-2 py-1 rounded text-xs mr-1">Editar</button>
+                    <button @click="confirmDelete('country', country)" class="text-red-600 hover:bg-red-50 px-2 py-1 rounded text-xs">Eliminar</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- MEMBERSHIPS -->
+      <div v-if="currentPage==='memberships'">
+        <div class="bg-white rounded-xl p-5 shadow-sm">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-semibold text-gray-800">Membresías</h3>
+            <button @click="showAddMembership" class="bg-accent hover:bg-accent-dark text-white px-4 py-2 rounded-lg text-sm">
+              ➕ Nueva Membresía
+            </button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b">
+                  <th class="text-left py-2">ID</th>
+                  <th class="text-left py-2">Instalador</th>
+                  <th class="text-left py-2">Tipo</th>
+                  <th class="text-left py-2">Pago</th>
+                  <th class="text-left py-2">Vencimiento</th>
+                  <th class="text-left py-2">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="membership in memberships" :key="membership.id" class="border-b hover:bg-gray-50">
+                  <td class="py-2">{{ membership.id }}</td>
+                  <td class="py-2 font-medium">{{ membership.installer_name }}</td>
+                  <td class="py-2">{{ membership.membership_type || 'N/A' }}</td>
+                  <td class="py-2">{{ formatDate(membership.payment_date) }}</td>
+                  <td class="py-2">{{ formatDate(membership.expiry_date) }}</td>
+                  <td class="py-2">
+                    <button @click="editMembership(membership)" class="text-blue-600 hover:bg-blue-50 px-2 py-1 rounded text-xs mr-1">Editar</button>
+                    <button @click="confirmDelete('membership', membership)" class="text-red-600 hover:bg-red-50 px-2 py-1 rounded text-xs">Eliminar</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TRAININGS -->
+      <div v-if="currentPage==='trainings'">
+        <div class="bg-white rounded-xl p-5 shadow-sm">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-semibold text-gray-800">Capacitaciones</h3>
+            <button @click="showAddTraining" class="bg-accent hover:bg-accent-dark text-white px-4 py-2 rounded-lg text-sm">
+              ➕ Nueva Capacitación
+            </button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b">
+                  <th class="text-left py-2">ID</th>
+                  <th class="text-left py-2">Instalador</th>
+                  <th class="text-left py-2">Tipo</th>
+                  <th class="text-left py-2">Capacitación</th>
+                  <th class="text-left py-2">Fecha</th>
+                  <th class="text-left py-2">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="training in trainings" :key="training.id" class="border-b hover:bg-gray-50">
+                  <td class="py-2">{{ training.id }}</td>
+                  <td class="py-2 font-medium">{{ training.installer_name }}</td>
+                  <td class="py-2">{{ training.training_type || 'N/A' }}</td>
+                  <td class="py-2">{{ training.training_name || 'N/A' }}</td>
+                  <td class="py-2">{{ formatDate(training.date) }}</td>
+                  <td class="py-2">
+                    <button @click="editTraining(training)" class="text-blue-600 hover:bg-blue-50 px-2 py-1 rounded text-xs mr-1">Editar</button>
+                    <button @click="confirmDelete('training', training)" class="text-red-600 hover:bg-red-50 px-2 py-1 rounded text-xs">Eliminar</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- VALIDATIONS -->
+      <div v-if="currentPage==='validations'">
+        <div class="bg-white rounded-xl p-5 shadow-sm">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-semibold text-gray-800">Validaciones</h3>
+            <button @click="showAddValidation" class="bg-accent hover:bg-accent-dark text-white px-4 py-2 rounded-lg text-sm">
+              ➕ Nueva Validación
+            </button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b">
+                  <th class="text-left py-2">ID</th>
+                  <th class="text-left py-2">Instalador</th>
+                  <th class="text-left py-2">Validado por</th>
+                  <th class="text-left py-2">Fecha</th>
+                  <th class="text-left py-2">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="validation in validations" :key="validation.id" class="border-b hover:bg-gray-50">
+                  <td class="py-2">{{ validation.id }}</td>
+                  <td class="py-2 font-medium">{{ validation.installer_name }}</td>
+                  <td class="py-2">{{ validation.validated_by_name || 'N/A' }}</td>
+                  <td class="py-2">{{ formatDate(validation.date) }}</td>
+                  <td class="py-2">
+                    <button @click="editValidation(validation)" class="text-blue-600 hover:bg-blue-50 px-2 py-1 rounded text-xs mr-1">Editar</button>
+                    <button @click="confirmDelete('validation', validation)" class="text-red-600 hover:bg-red-50 px-2 py-1 rounded text-xs">Eliminar</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DEVICES -->
+      <div v-if="currentPage==='devices'">
+        <div class="bg-white rounded-xl p-5 shadow-sm">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-semibold text-gray-800">Gestion de Dispositivos</h3>
+            <button @click="showAddDevice" class="bg-accent hover:bg-accent-dark text-white px-4 py-2 rounded-lg text-sm">
+              + Agregar Dispositivo
+            </button>
+          </div>
+          <div class="mb-4">
+            <input v-model="deviceSearch" placeholder="Buscar dispositivos..." 
+              class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent">
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b">
+                  <th class="text-left py-2">ID</th>
+                  <th class="text-left py-2">Serial</th>
+                  <th class="text-left py-2">Nombre</th>
+                  <th class="text-left py-2">Tipo</th>
+                  <th class="text-left py-2">Ubicacion</th>
+                  <th class="text-left py-2">Estado</th>
+                  <th class="text-left py-2">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="device in filteredDevices" :key="device.id" class="border-b hover:bg-gray-50 cursor-pointer" @dblclick="openDeviceDetail(device)">
+                  <td class="py-2">{{ device.id }}</td>
+                  <td class="py-2 font-mono text-xs">{{ device.serial_number }}</td>
+                  <td class="py-2 font-medium">{{ device.name }}</td>
+                  <td class="py-2">{{ deviceTypeIcon(device.device_type) }} {{ deviceTypeName(device.device_type) }}</td>
+                  <td class="py-2">{{ device.location || 'N/A' }}</td>
+                  <td class="py-2">
+                    <span :class="device.is_online ? 'text-green-600 bg-green-100' : 'text-gray-600 bg-gray-100'" class="px-2 py-1 rounded-full text-xs">
+                      {{ device.is_online ? 'Online' : 'Offline' }}
+                    </span>
+                  </td>
+                  <td class="py-2">
+                    <button @click.stop="openDeviceDetail(device)" class="text-indigo-600 hover:bg-indigo-50 px-2 py-1 rounded text-xs mr-1">Ver</button>
+                    <button @click.stop="editDevice(device)" class="text-blue-600 hover:bg-blue-50 px-2 py-1 rounded text-xs mr-1">Editar</button>
+                    <button @click.stop="deleteDevice(device)" class="text-red-600 hover:bg-red-50 px-2 py-1 rounded text-xs">Eliminar</button>
+                  </td>
+                </tr>
+                <tr v-if="filteredDevices.length===0"><td colspan="7" class="py-8 text-center text-gray-400">No se encontraron dispositivos</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="text-xs text-gray-400 mt-2">Doble clic en una fila para ver detalles completos</p>
+        </div>
+      </div>
+
+      <!-- DEVICE DETAIL MODAL -->
+      <div v-if="deviceDetailModal && selectedDevice" class="modal fixed inset-0 bg-black/50 flex items-center justify-center z-50" @click.self="deviceDetailModal=false">
+        <div class="bg-white rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+          <div class="flex justify-between items-center mb-4">
+            <h4 class="font-bold text-lg">Detalle del Dispositivo</h4>
+            <button @click="deviceDetailModal=false" class="text-gray-500 hover:text-gray-700 text-xl">x</button>
+          </div>
+          <div class="text-center mb-6">
+            <div class="text-8xl mb-2">{{ deviceTypeIcon(selectedDevice.device_type) }}</div>
+            <div class="text-xl font-bold text-gray-800">{{ selectedDevice.name }}</div>
+            <div class="text-sm text-gray-500">{{ deviceTypeName(selectedDevice.device_type) }}</div>
+            <span :class="selectedDevice.is_online ? 'text-green-600 bg-green-100' : 'text-gray-600 bg-gray-100'" class="px-3 py-1 rounded-full text-sm mt-2 inline-block">
+              {{ selectedDevice.is_online ? 'Online' : 'Offline' }}
+            </span>
+          </div>
+          <div class="grid grid-cols-2 gap-4 text-sm">
+            <div><span class="text-gray-500">ID:</span> <span class="font-medium">{{ selectedDevice.id }}</span></div>
+            <div><span class="text-gray-500">Serial:</span> <span class="font-mono">{{ selectedDevice.serial_number }}</span></div>
+            <div><span class="text-gray-500">MAC:</span> <span class="font-mono">{{ selectedDevice.mac_address || 'N/A' }}</span></div>
+            <div><span class="text-gray-500">Modelo:</span> <span>{{ selectedDevice.model || 'N/A' }}</span></div>
+            <div><span class="text-gray-500">Ubicacion:</span> <span>{{ selectedDevice.location || 'N/A' }}</span></div>
+            <div><span class="text-gray-500">Firmware:</span> <span>{{ selectedDevice.firmware_version || 'N/A' }}</span></div>
+            <div><span class="text-gray-500">Estado Motor:</span> <span>{{ selectedDevice.motor_status_name || selectedDevice.motor_status || 'N/A' }}</span></div>
+            <div><span class="text-gray-500">Owner ID:</span> <span>{{ selectedDevice.owner_id || 'N/A' }}</span></div>
+            <div class="col-span-2"><span class="text-gray-500">Descripcion:</span> <span>{{ selectedDevice.description || 'Sin descripcion' }}</span></div>
+            <div><span class="text-gray-500">Ultima conexion:</span> <span>{{ formatDate(selectedDevice.last_seen) }}</span></div>
+            <div><span class="text-gray-500">Creado:</span> <span>{{ formatDate(selectedDevice.created_at) }}</span></div>
+            <div><span class="text-gray-500">Actualizado:</span> <span>{{ formatDate(selectedDevice.updated_at) }}</span></div>
+          </div>
+          <div v-if="selectedDevice._full && selectedDevice._full.parameters" class="mt-4">
+            <h5 class="font-semibold text-gray-700 mb-2">Parametros</h5>
+            <pre class="bg-gray-50 p-3 rounded text-xs overflow-auto max-h-40">{{ JSON.stringify(selectedDevice._full.parameters, null, 2) }}</pre>
+          </div>
+          <div v-if="selectedDevice._full && selectedDevice._full.users && selectedDevice._full.users.length" class="mt-4">
+            <h5 class="font-semibold text-gray-700 mb-2">Usuarios asociados</h5>
+            <div v-for="u in selectedDevice._full.users" :key="u.id" class="text-sm text-gray-600">{{ u.name || u.email || u.id }}</div>
+          </div>
+          <div class="flex justify-end gap-2 mt-6">
+          <!-- DEVICE CONTROL BUTTONS -->
+          <div v-if="selectedDevice.is_online" class="mt-4 border-t pt-4">
+            <h5 class="font-semibold text-gray-700 mb-3">Control del Dispositivo</h5>
+            <div class="grid grid-cols-2 gap-3">
+              <button @click="sendDeviceCommand(selectedDevice.id, 'OPEN')" 
+                      :disabled="commandLoading" 
+                      class="bg-green-500 hover:bg-green-600 disabled:bg-gray-300 text-white px-3 py-2 rounded text-sm flex items-center justify-center">
+                <span v-if="commandLoading && currentCommand === 'OPEN'">🔄</span>
+                <span v-else>🚪</span>
+                <span class="ml-2">ABRIR</span>
+              </button>
+              <button @click="sendDeviceCommand(selectedDevice.id, 'CLOSE')" 
+                      :disabled="commandLoading" 
+                      class="bg-red-500 hover:bg-red-600 disabled:bg-gray-300 text-white px-3 py-2 rounded text-sm flex items-center justify-center">
+                <span v-if="commandLoading && currentCommand === 'CLOSE'">🔄</span>
+                <span v-else>🚪</span>
+                <span class="ml-2">CERRAR</span>
+              </button>
+              <button @click="sendDeviceCommand(selectedDevice.id, 'STOP')" 
+                      :disabled="commandLoading" 
+                      class="bg-orange-500 hover:bg-orange-600 disabled:bg-gray-300 text-white px-3 py-2 rounded text-sm flex items-center justify-center">
+                <span v-if="commandLoading && currentCommand === 'STOP'">🔄</span>
+                <span v-else>⏸️</span>
+                <span class="ml-2">PARAR</span>
+              </button>
+              <button @click="sendDeviceCommand(selectedDevice.id, 'PEDESTRIAN')" 
+                      :disabled="commandLoading" 
+                      class="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 text-white px-3 py-2 rounded text-sm flex items-center justify-center">
+                <span v-if="commandLoading && currentCommand === 'PEDESTRIAN'">🔄</span>
+                <span v-else>🚶</span>
+                <span class="ml-2">PEATONAL</span>
+              </button>
+            </div>
+            <div v-if="lastCommandResult" class="mt-3 p-2 rounded text-sm" 
+                 :class="lastCommandResult.success ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
+              {{ lastCommandResult.message }}
+            </div>
+          </div>
+          <div v-else class="mt-4 border-t pt-4">
+            <div class="text-center text-gray-500 text-sm">
+              🔌 Dispositivo desconectado - controles no disponibles
+            </div>
+          </div>
+          <div class="flex justify-end gap-2 mt-6">
+            <button @click="editDeviceFromDetail" class="bg-accent hover:bg-accent-dark text-white px-4 py-2 rounded-lg text-sm">Editar</button>
+            <button @click="deviceDetailModal=false" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg text-sm">Cerrar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- DEVICE FORM MODAL -->
+      <div v-if="deviceFormModal" class="modal fixed inset-0 bg-black/50 flex items-center justify-center z-50" @click.self="deviceFormModal=null">
+        <div class="bg-white rounded-xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
+          <div class="flex justify-between items-center mb-4">
+            <h4 class="font-bold">{{ deviceFormModal.title }}</h4>
+            <button @click="deviceFormModal=null" class="text-gray-500 hover:text-gray-700">x</button>
+          </div>
+          <form @submit.prevent="submitDeviceForm">
+            <div v-if="!deviceFormModal.isEdit" class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Numero de Serie *</label>
+              <input v-model="deviceForm.serial_number" type="text" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent">
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Nombre *</label>
+              <input v-model="deviceForm.name" type="text" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent">
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Tipo de Dispositivo *</label>
+              <select v-model="deviceForm.device_type" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent">
+                <option value="gate">Porton</option>
+                <option value="barrier">Barrera</option>
+                <option value="door">Puerta</option>
+                <option value="turnstile">Torniquete</option>
+              </select>
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Descripcion</label>
+              <textarea v-model="deviceForm.description" rows="2" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"></textarea>
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Ubicacion</label>
+              <input v-model="deviceForm.location" type="text" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent">
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Modelo</label>
+              <input v-model="deviceForm.model" type="text" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent">
+            </div>
+            <div v-if="!deviceFormModal.isEdit" class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Direccion MAC</label>
+              <input v-model="deviceForm.mac_address" type="text" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent" placeholder="AA:BB:CC:DD:EE:FF">
+            </div>
+            <div class="flex justify-end gap-2 mt-6">
+              <button type="button" @click="deviceFormModal=null" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Cancelar</button>
+              <button type="submit" :disabled="deviceFormLoading" class="bg-accent hover:bg-accent-dark text-white px-4 py-2 rounded-lg">
+                {{ deviceFormLoading ? 'Guardando...' : (deviceFormModal.isEdit ? 'Actualizar' : 'Crear') }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Generic Modal for Forms -->
+<div v-if="currentModal" class="modal fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-xl p-6 w-full max-w-md max-h-90vh overflow-y-auto">
+    <div class="flex justify-between items-center mb-4">
+      <h4 class="font-bold">{{ currentModal.title }}</h4>
+      <button @click="closeModal" class="text-gray-500 hover:text-gray-700">✕</button>
+    </div>
+    <form @submit.prevent="submitForm">
+      <div v-for="field in currentModal.fields" :key="field.name" class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">{{ field.label }}</label>
+        <select v-if="field.type === 'select'" v-model="currentForm[field.name]" 
+          class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent" 
+          :required="field.required">
+          <option value="">{{ field.placeholder || 'Seleccionar...' }}</option>
+          <option v-for="option in field.options" :key="option.value" :value="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+        <textarea v-else-if="field.type === 'textarea'" v-model="currentForm[field.name]" 
+          class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent" 
+          rows="3" :required="field.required" :placeholder="field.placeholder">
+        </textarea>
+        <input v-else v-model="currentForm[field.name]" :type="field.type || 'text'"
+          class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent" 
+          :required="field.required" :placeholder="field.placeholder">
+      </div>
+      <div class="flex justify-end gap-2 mt-6">
+        <button type="button" @click="closeModal" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+          Cancelar
+        </button>
+        <button type="submit" :disabled="formLoading" class="bg-accent hover:bg-accent-dark text-white px-4 py-2 rounded-lg">
+          {{ formLoading ? 'Guardando...' : (currentModal.isEdit ? 'Actualizar' : 'Crear') }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Toast -->
+<div v-if="toast" class="fixed bottom-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg text-sm text-white" :class="toast.type==='error'?'bg-red-500':'bg-green-500'">
+  {{ toast.msg }}
+</div>
+
+<!-- Delete confirm -->
+<div v-if="deleteConfirm" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-xl p-6 w-96">
+    <h4 class="font-bold mb-2">⚠️ Confirmar eliminación</h4>
+    <p class="text-sm text-gray-600 mb-4">¿Eliminar {{ deleteConfirm.name }}?</p>
+    <div class="flex gap-2">
+      <button @click="executeDelete" class="bg-red-500 text-white px-4 py-2 rounded text-sm">Eliminar</button>
+      <button @click="deleteConfirm=null" class="text-gray-500 text-sm">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+const API = 'http://157.245.1.231:8000';
+const { createApp, ref, computed, onMounted } = Vue;
+
+createApp({
+  setup() {
+    const token = ref(localStorage.getItem('vita_token') || '');
+    const userEmail = ref(localStorage.getItem('vita_email') || '');
+    const loginForm = ref({ email: '', password: '' });
+    const loginError = ref('');
+    const loginLoading = ref(false);
+    const currentPage = ref('dashboard');
+    const sidebarOpen = ref(true);
+    const toast = ref(null);
+
+    // Data
+    const health = ref({ status: '', services: {}, version: '' });
+    const devices = ref([]);
+    const users = ref([]);
+    const groups = ref([]);
+    const notifications = ref([]);
+    const supportRequests = ref([]);
+
+    // Installer management data
+    const installers = ref([]);
+    const engines = ref([]);
+    const engineTypes = ref([]);
+    const activations = ref([]);
+    const countries = ref([]);
+    const memberships = ref([]);
+    const trainings = ref([]);
+    const validations = ref([]);
+
+    // Search filters
+    const installerSearch = ref('');
+    const engineSearch = ref('');
+    const activationSearch = ref('');
+    const deviceSearch = ref('');
+    const selectedDevice = ref(null);
+    const deviceDetailModal = ref(false);
+    const deviceFormModal = ref(null);
+    const deviceForm = ref({});
+    const deviceFormLoading = ref(false);
+
+    // Device control state
+    const commandLoading = ref(false);
+    const currentCommand = ref(null);
+    const lastCommandResult = ref(null);
+
+    // Modal system
+    const currentModal = ref(null);
+    const currentForm = ref({});
+    const formLoading = ref(false);
+    const deleteConfirm = ref(null);
+
+    const menuItems = [
+      { id: 'dashboard', icon: '📊', label: 'Dashboard' },
+      { id: 'devices', icon: '📱', label: 'Dispositivos' },
+      { id: 'users', icon: '👥', label: 'Usuarios' },
+      { id: 'groups', icon: '📁', label: 'Grupos' },
+      { id: 'notifications', icon: '🔔', label: 'Notificaciones' },
+      { id: 'support', icon: '🎫', label: 'Soporte' },
+      // Installer Management Section
+      { id: 'installers', icon: '👷', label: 'Instaladores' },
+      { id: 'engines', icon: '⚙️', label: 'Motores' },
+      { id: 'engine-types', icon: '📋', label: 'Tipos de Motor' },
+      { id: 'activations', icon: '🔑', label: 'Activaciones' },
+      { id: 'countries', icon: '🌍', label: 'Países' },
+      { id: 'memberships', icon: '📄', label: 'Membresías' },
+      { id: 'trainings', icon: '🎓', label: 'Capacitaciones' },
+      { id: 'validations', icon: '✅', label: 'Validaciones' },
+    ];
+
+    const currentPageTitle = computed(() => menuItems.find(m => m.id === currentPage.value)?.label || '');
+
+    // Computed filters
+    const filteredInstallers = computed(() => {
+      const s = installerSearch.value.toLowerCase();
+      return s ? installers.value.filter(i => 
+        i.name.toLowerCase().includes(s) || 
+        i.email.toLowerCase().includes(s) ||
+        i.identify.toLowerCase().includes(s)
+      ) : installers.value;
+    });
+
+    const filteredEngines = computed(() => {
+      const s = engineSearch.value.toLowerCase();
+      return s ? engines.value.filter(e => 
+        e.model.toLowerCase().includes(s) || 
+        (e.brand && e.brand.toLowerCase().includes(s))
+      ) : engines.value;
+    });
+
+    const filteredActivations = computed(() => {
+      const s = activationSearch.value.toLowerCase();
+      return s ? activations.value.filter(a => 
+        a.installer_name.toLowerCase().includes(s) || 
+        a.engine_model.toLowerCase().includes(s)
+      ) : activations.value;
+    });
+
+    const filteredDevices = computed(() => {
+      const s = deviceSearch.value.toLowerCase();
+      if (!s) return devices.value;
+      return devices.value.filter(d =>
+        (d.name && d.name.toLowerCase().includes(s)) ||
+        (d.serial_number && d.serial_number.toLowerCase().includes(s)) ||
+        (d.device_type && d.device_type.toLowerCase().includes(s)) ||
+        (d.location && d.location.toLowerCase().includes(s))
+      );
+    });
+
+    const deviceTypeIcon = (type) => {
+      const icons = { gate: '\ud83c\udfe0', barrier: '\ud83d\udea7', door: '\ud83d\udeaa', turnstile: '\ud83d\udd04' };
+      return icons[type] || '\ud83d\udcf1';
+    };
+    const deviceTypeName = (type) => {
+      const names = { gate: 'Porton', barrier: 'Barrera', door: 'Puerta', turnstile: 'Torniquete' };
+      return names[type] || type || 'Desconocido';
+    };
+
+    // API functions
+    const api = async (path, opts = {}) => {
+      const headers = { 'Content-Type': 'application/json' };
+      if (token.value) headers['Authorization'] = 'Bearer ' + token.value;
+      const res = await fetch(API + path, { ...opts, headers: { ...headers, ...opts.headers } });
+      if (res.status === 401) { logout(); throw new Error('Unauthorized'); }
+      if (!res.ok) { 
+        const e = await res.json().catch(() => ({})); 
+        throw new Error(e.detail || res.statusText); 
+      }
+      return res.json();
+    };
+
+    const showToast = (msg, type = 'success') => { 
+      toast.value = { msg, type }; 
+      setTimeout(() => toast.value = null, 3000); 
+    };
+
+    // Auth functions
+    const login = async () => {
+      loginLoading.value = true; 
+      loginError.value = '';
+      try {
+        const data = await api('/api/v1/auth/login', { 
+          method: 'POST', 
+          body: JSON.stringify(loginForm.value) 
+        });
+        token.value = data.access_token;
+        userEmail.value = loginForm.value.email;
+        localStorage.setItem('vita_token', data.access_token);
+        localStorage.setItem('vita_email', loginForm.value.email);
+        loadAll();
+      } catch (e) { 
+        loginError.value = 'Credenciales inválidas'; 
+      }
+      loginLoading.value = false;
+    };
+
+    const logout = () => {
+      token.value = '';
+      userEmail.value = '';
+      localStorage.removeItem('vita_token');
+      localStorage.removeItem('vita_email');
+    };
+
+    // Data loading functions
+    const loadHealth = async () => {
+      try {
+        health.value = await api('/api/v1/health');
+      } catch (e) {
+        console.error('Health check failed:', e);
+      }
+    };
+
+    const loadInstallersData = async () => {
+      try {
+        const [
+          installersData,
+          enginesData, 
+          engineTypesData,
+          activationsData,
+          countriesData,
+          membershipsData,
+          trainingsData,
+          validationsData
+        ] = await Promise.all([
+          api('/api/v1/admin/installers'),
+          api('/api/v1/admin/engines'),
+          api('/api/v1/admin/engine-types'),
+          api('/api/v1/admin/activations'),
+          api('/api/v1/admin/countries'),
+          api('/api/v1/admin/memberships'),
+          api('/api/v1/admin/trainings'),
+          api('/api/v1/admin/validations')
+        ]);
+
+        installers.value = installersData.data || [];
+        engines.value = enginesData.data || [];
+        engineTypes.value = engineTypesData.data || [];
+        activations.value = activationsData.data || [];
+        countries.value = countriesData.data || [];
+        memberships.value = membershipsData.data || [];
+        trainings.value = trainingsData.data || [];
+        validations.value = validationsData.data || [];
+      } catch (e) {
+        showToast('Error al cargar datos de instaladores: ' + e.message, 'error');
+      }
+    };
+
+    const loadAll = async () => {
+      await loadHealth();
+      await loadInstallersData();
+      // Load existing data (devices, users, etc.)
+      try {
+        const devData = await api('/api/v1/devices');
+        devices.value = devData.data || devData || [];
+      } catch (e) {
+        console.error('Error loading devices:', e);
+        devices.value = [];
+      }
+      try {
+        users.value = [];
+        groups.value = [];
+        notifications.value = [];
+        supportRequests.value = [];
+      } catch (e) {
+        console.error('Error loading data:', e);
+      }
+    };
+
+    // Modal functions
+    const openModal = (config) => {
+      currentModal.value = config;
+      currentForm.value = config.data || {};
+    };
+
+    const closeModal = () => {
+      currentModal.value = null;
+      currentForm.value = {};
+      formLoading.value = false;
+    };
+
+    const submitForm = async () => {
+      formLoading.value = true;
+      try {
+        const endpoint = currentModal.value.endpoint;
+        const method = currentModal.value.isEdit ? 'PUT' : 'POST';
+        const url = currentModal.value.isEdit ? `${endpoint}/${currentForm.value.id}` : endpoint;
+        
+        await api(url, {
+          method,
+          body: JSON.stringify(currentForm.value)
+        });
+
+        showToast(`${currentModal.value.entity} ${currentModal.value.isEdit ? 'actualizado' : 'creado'} exitosamente`);
+        closeModal();
+        await loadInstallersData();
+      } catch (e) {
+        showToast('Error: ' + e.message, 'error');
+      }
+      formLoading.value = false;
+    };
+
+    // CRUD functions for installers
+    const showAddInstaller = () => {
+      openModal({
+        title: 'Agregar Instalador',
+        entity: 'Instalador',
+        endpoint: '/api/v1/admin/installers',
+        isEdit: false,
+        fields: [
+          { name: 'identify', label: 'Identificación', type: 'text', required: true },
+          { name: 'name', label: 'Nombre', type: 'text', required: true },
+          { name: 'email', label: 'Correo electrónico', type: 'email', required: true },
+          { name: 'tel', label: 'Teléfono', type: 'text' },
+          { name: 'address', label: 'Dirección', type: 'textarea' },
+          { name: 'country_id', label: 'País', type: 'select', options: countries.value.map(c => ({ value: c.id, label: c.name })) },
+          { name: 'is_active', label: 'Activo', type: 'checkbox' }
+        ]
+      });
+    };
+
+    const editInstaller = (installer) => {
+      openModal({
+        title: 'Editar Instalador',
+        entity: 'Instalador',
+        endpoint: '/api/v1/admin/installers',
+        isEdit: true,
+        data: { ...installer },
+        fields: [
+          { name: 'identify', label: 'Identificación', type: 'text', required: true },
+          { name: 'name', label: 'Nombre', type: 'text', required: true },
+          { name: 'email', label: 'Correo electrónico', type: 'email', required: true },
+          { name: 'tel', label: 'Teléfono', type: 'text' },
+          { name: 'address', label: 'Dirección', type: 'textarea' },
+          { name: 'country_id', label: 'País', type: 'select', options: countries.value.map(c => ({ value: c.id, label: c.name })) },
+          { name: 'is_active', label: 'Activo', type: 'checkbox' }
+        ]
+      });
+    };
+
+    // CRUD functions for engines
+    const showAddEngine = () => {
+      openModal({
+        title: 'Agregar Motor',
+        entity: 'Motor',
+        endpoint: '/api/v1/admin/engines',
+        isEdit: false,
+        fields: [
+          { name: 'model', label: 'Modelo', type: 'text', required: true },
+          { name: 'engine_type_id', label: 'Tipo de Motor', type: 'select', options: engineTypes.value.map(t => ({ value: t.id, label: t.name })) },
+          { name: 'brand', label: 'Marca', type: 'text' },
+          { name: 'pcb', label: 'PCB', type: 'text' },
+          { name: 'documentation_url', label: 'URL de Documentación', type: 'url' }
+        ]
+      });
+    };
+
+    const editEngine = (engine) => {
+      openModal({
+        title: 'Editar Motor',
+        entity: 'Motor',
+        endpoint: '/api/v1/admin/engines',
+        isEdit: true,
+        data: { ...engine },
+        fields: [
+          { name: 'model', label: 'Modelo', type: 'text', required: true },
+          { name: 'engine_type_id', label: 'Tipo de Motor', type: 'select', options: engineTypes.value.map(t => ({ value: t.id, label: t.name })) },
+          { name: 'brand', label: 'Marca', type: 'text' },
+          { name: 'pcb', label: 'PCB', type: 'text' },
+          { name: 'documentation_url', label: 'URL de Documentación', type: 'url' }
+        ]
+      });
+    };
+
+    // CRUD functions for engine types
+    const showAddEngineType = () => {
+      openModal({
+        title: 'Agregar Tipo de Motor',
+        entity: 'Tipo de Motor',
+        endpoint: '/api/v1/admin/engine-types',
+        isEdit: false,
+        fields: [
+          { name: 'name', label: 'Nombre', type: 'text', required: true }
+        ]
+      });
+    };
+
+    const editEngineType = (type) => {
+      openModal({
+        title: 'Editar Tipo de Motor',
+        entity: 'Tipo de Motor',
+        endpoint: '/api/v1/admin/engine-types',
+        isEdit: true,
+        data: { ...type },
+        fields: [
+          { name: 'name', label: 'Nombre', type: 'text', required: true }
+        ]
+      });
+    };
+
+    // CRUD functions for activations
+    const showAddActivation = () => {
+      openModal({
+        title: 'Nueva Activación',
+        entity: 'Activación',
+        endpoint: '/api/v1/admin/activations',
+        isEdit: false,
+        fields: [
+          { name: 'installer_id', label: 'Instalador', type: 'select', required: true, options: installers.value.map(i => ({ value: i.id, label: i.name })) },
+          { name: 'engine_id', label: 'Motor', type: 'select', required: true, options: engines.value.map(e => ({ value: e.id, label: e.model })) },
+          { name: 'vita_serial', label: 'Serial VITA', type: 'text' },
+          { name: 'activation_date', label: 'Fecha de Activación', type: 'date', required: true },
+          { name: 'notes', label: 'Notas', type: 'textarea' }
+        ]
+      });
+    };
+
+    const editActivation = (activation) => {
+      openModal({
+        title: 'Editar Activación',
+        entity: 'Activación',
+        endpoint: '/api/v1/admin/activations',
+        isEdit: true,
+        data: { ...activation },
+        fields: [
+          { name: 'installer_id', label: 'Instalador', type: 'select', required: true, options: installers.value.map(i => ({ value: i.id, label: i.name })) },
+          { name: 'engine_id', label: 'Motor', type: 'select', required: true, options: engines.value.map(e => ({ value: e.id, label: e.model })) },
+          { name: 'vita_serial', label: 'Serial VITA', type: 'text' },
+          { name: 'activation_date', label: 'Fecha de Activación', type: 'date', required: true },
+          { name: 'notes', label: 'Notas', type: 'textarea' }
+        ]
+      });
+    };
+
+    // CRUD functions for countries
+    const showAddCountry = () => {
+      openModal({
+        title: 'Agregar País',
+        entity: 'País',
+        endpoint: '/api/v1/admin/countries',
+        isEdit: false,
+        fields: [
+          { name: 'name', label: 'Nombre', type: 'text', required: true },
+          { name: 'region_code', label: 'Código Regional', type: 'text' }
+        ]
+      });
+    };
+
+    const editCountry = (country) => {
+      openModal({
+        title: 'Editar País',
+        entity: 'País',
+        endpoint: '/api/v1/admin/countries',
+        isEdit: true,
+        data: { ...country },
+        fields: [
+          { name: 'name', label: 'Nombre', type: 'text', required: true },
+          { name: 'region_code', label: 'Código Regional', type: 'text' }
+        ]
+      });
+    };
+
+    // CRUD functions for memberships
+    const showAddMembership = () => {
+      openModal({
+        title: 'Nueva Membresía',
+        entity: 'Membresía',
+        endpoint: '/api/v1/admin/memberships',
+        isEdit: false,
+        fields: [
+          { name: 'installer_id', label: 'Instalador', type: 'select', required: true, options: installers.value.map(i => ({ value: i.id, label: i.name })) },
+          { name: 'payment_date', label: 'Fecha de Pago', type: 'date' },
+          { name: 'expiry_date', label: 'Fecha de Vencimiento', type: 'date' },
+          { name: 'membership_type', label: 'Tipo de Membresía', type: 'text' }
+        ]
+      });
+    };
+
+    const editMembership = (membership) => {
+      openModal({
+        title: 'Editar Membresía',
+        entity: 'Membresía',
+        endpoint: '/api/v1/admin/memberships',
+        isEdit: true,
+        data: { ...membership },
+        fields: [
+          { name: 'installer_id', label: 'Instalador', type: 'select', required: true, options: installers.value.map(i => ({ value: i.id, label: i.name })) },
+          { name: 'payment_date', label: 'Fecha de Pago', type: 'date' },
+          { name: 'expiry_date', label: 'Fecha de Vencimiento', type: 'date' },
+          { name: 'membership_type', label: 'Tipo de Membresía', type: 'text' }
+        ]
+      });
+    };
+
+    // CRUD functions for trainings
+    const showAddTraining = () => {
+      openModal({
+        title: 'Nueva Capacitación',
+        entity: 'Capacitación',
+        endpoint: '/api/v1/admin/trainings',
+        isEdit: false,
+        fields: [
+          { name: 'installer_id', label: 'Instalador', type: 'select', required: true, options: installers.value.map(i => ({ value: i.id, label: i.name })) },
+          { name: 'training_type', label: 'Tipo de Capacitación', type: 'text' },
+          { name: 'training_name', label: 'Nombre de la Capacitación', type: 'text' },
+          { name: 'date', label: 'Fecha', type: 'date' },
+          { name: 'description', label: 'Descripción', type: 'textarea' }
+        ]
+      });
+    };
+
+    const editTraining = (training) => {
+      openModal({
+        title: 'Editar Capacitación',
+        entity: 'Capacitación',
+        endpoint: '/api/v1/admin/trainings',
+        isEdit: true,
+        data: { ...training },
+        fields: [
+          { name: 'installer_id', label: 'Instalador', type: 'select', required: true, options: installers.value.map(i => ({ value: i.id, label: i.name })) },
+          { name: 'training_type', label: 'Tipo de Capacitación', type: 'text' },
+          { name: 'training_name', label: 'Nombre de la Capacitación', type: 'text' },
+          { name: 'date', label: 'Fecha', type: 'date' },
+          { name: 'description', label: 'Descripción', type: 'textarea' }
+        ]
+      });
+    };
+
+    // CRUD functions for validations
+    const showAddValidation = () => {
+      openModal({
+        title: 'Nueva Validación',
+        entity: 'Validación',
+        endpoint: '/api/v1/admin/validations',
+        isEdit: false,
+        fields: [
+          { name: 'installer_id', label: 'Instalador', type: 'select', required: true, options: installers.value.map(i => ({ value: i.id, label: i.name })) },
+          { name: 'validated_by_id', label: 'Validado por', type: 'select', options: installers.value.map(i => ({ value: i.id, label: i.name })) },
+          { name: 'date', label: 'Fecha', type: 'date', required: true },
+          { name: 'notes', label: 'Notas', type: 'textarea' }
+        ]
+      });
+    };
+
+    const editValidation = (validation) => {
+      openModal({
+        title: 'Editar Validación',
+        entity: 'Validación',
+        endpoint: '/api/v1/admin/validations',
+        isEdit: true,
+        data: { ...validation },
+        fields: [
+          { name: 'installer_id', label: 'Instalador', type: 'select', required: true, options: installers.value.map(i => ({ value: i.id, label: i.name })) },
+          { name: 'validated_by_id', label: 'Validado por', type: 'select', options: installers.value.map(i => ({ value: i.id, label: i.name })) },
+          { name: 'date', label: 'Fecha', type: 'date', required: true },
+          { name: 'notes', label: 'Notas', type: 'textarea' }
+        ]
+      });
+    };
+
+
+    // Device CRUD functions
+    const openDeviceDetail = async (device) => {
+      try {
+        const fullData = await api('/api/v1/devices/' + device.id + '/full');
+        selectedDevice.value = { ...device, ...fullData.device, _full: fullData };
+      } catch (e) {
+        selectedDevice.value = { ...device };
+      }
+      deviceDetailModal.value = true;
+    };
+
+    const showAddDevice = () => {
+      deviceForm.value = { serial_number: '', name: '', device_type: 'gate', description: '', location: '', model: '', mac_address: '' };
+      deviceFormModal.value = { title: 'Agregar Dispositivo', isEdit: false };
+    };
+
+    const editDevice = (device) => {
+      deviceForm.value = { id: device.id, name: device.name || '', description: device.description || '', location: device.location || '', model: device.model || '', device_type: device.device_type || 'gate' };
+      deviceFormModal.value = { title: 'Editar Dispositivo', isEdit: true };
+    };
+
+    const editDeviceFromDetail = () => {
+      editDevice(selectedDevice.value);
+    };
+
+    const submitDeviceForm = async () => {
+      deviceFormLoading.value = true;
+      try {
+        if (deviceFormModal.value.isEdit) {
+          const { id, ...body } = deviceForm.value;
+          await api('/api/v1/devices/' + id, { method: 'PUT', body: JSON.stringify(body) });
+          showToast('Dispositivo actualizado exitosamente');
+        } else {
+          await api('/api/v1/devices', { method: 'POST', body: JSON.stringify(deviceForm.value) });
+          showToast('Dispositivo creado exitosamente');
+        }
+        deviceFormModal.value = null;
+        const devData = await api('/api/v1/devices');
+        devices.value = devData.data || devData || [];
+        if (deviceDetailModal.value && selectedDevice.value) {
+          const updated = devices.value.find(d => d.id === selectedDevice.value.id);
+          if (updated) await openDeviceDetail(updated);
+        }
+      } catch (e) {
+        showToast('Error: ' + e.message, 'error');
+      }
+      deviceFormLoading.value = false;
+    };
+
+    // Device control functions
+    const sendDeviceCommand = async (deviceId, command) => {
+      commandLoading.value = true;
+      currentCommand.value = command;
+      lastCommandResult.value = null;
+      
+      try {
+        const result = await api(`/api/v1/devices/${deviceId}/command`, {
+          method: 'POST',
+          body: JSON.stringify({ command })
+        });
+        
+        const statusMsg = {
+          'OPEN': 'Comando ABRIR enviado',
+          'CLOSE': 'Comando CERRAR enviado',
+          'STOP': 'Comando PARAR enviado',
+          'PEDESTRIAN': 'Comando PEATONAL enviado'
+        };
+        
+        const success = result.status === 'completed' || result.status === 'failed';
+        lastCommandResult.value = {
+          success,
+          message: success ? `${statusMsg[command]} ✅` : `${statusMsg[command]} - ${result.response?.error || 'Error desconocido'} ❌`
+        };
+        
+        showToast(lastCommandResult.value.message, success ? 'success' : 'error');
+        
+        // Clear result after 5 seconds
+        setTimeout(() => {
+          lastCommandResult.value = null;
+        }, 5000);
+        
+      } catch (e) {
+        lastCommandResult.value = {
+          success: false,
+          message: `Error al enviar comando: ${e.message} ❌`
+        };
+        showToast(lastCommandResult.value.message, 'error');
+      }
+      
+      commandLoading.value = false;
+      currentCommand.value = null;
+    };
+
+    const deleteDevice = (device) => {
+      deleteConfirm.value = { type: 'device', item: device, name: device.name || 'Dispositivo ID ' + device.id };
+    };
+
+    // Delete functions
+    const confirmDelete = (type, item) => {
+      deleteConfirm.value = {
+        type,
+        item,
+        name: item.name || item.model || item.installer_name || `${type} ID ${item.id}`
+      };
+    };
+
+    const executeDelete = async () => {
+      try {
+        const { type, item } = deleteConfirm.value;
+        let endpoint = '';
+        
+        switch (type) {
+          case 'installer': endpoint = `/api/v1/admin/installers/${item.id}`; break;
+          case 'engine': endpoint = `/api/v1/admin/engines/${item.id}`; break;
+          case 'engine-type': endpoint = `/api/v1/admin/engine-types/${item.id}`; break;
+          case 'activation': endpoint = `/api/v1/admin/activations/${item.id}`; break;
+          case 'country': endpoint = `/api/v1/admin/countries/${item.id}`; break;
+          case 'membership': endpoint = `/api/v1/admin/memberships/${item.id}`; break;
+          case 'training': endpoint = `/api/v1/admin/trainings/${item.id}`; break;
+          case 'validation': endpoint = `/api/v1/admin/validations/${item.id}`; break;
+          case 'device': endpoint = `/api/v1/devices/${item.id}`; break;
+        }
+
+        await api(endpoint, { method: 'DELETE' });
+        showToast('Elemento eliminado exitosamente');
+        deleteConfirm.value = null;
+        await loadInstallersData();
+        if (type === 'device') {
+          const devData = await api('/api/v1/devices');
+          devices.value = devData.data || devData || [];
+          deviceDetailModal.value = false;
+          selectedDevice.value = null;
+        }
+      } catch (e) {
+        showToast('Error al eliminar: ' + e.message, 'error');
+      }
+    };
+
+    // Utility functions
+    const formatDate = (dateStr) => {
+      if (!dateStr) return 'N/A';
+      try {
+        return new Date(dateStr).toLocaleDateString('es-ES');
+      } catch {
+        return dateStr;
+      }
+    };
+
+    // Initialize
+    onMounted(() => {
+      if (token.value) loadAll();
+    });
+
+    return {
+      // Auth
+      token, userEmail, loginForm, loginError, loginLoading, login, logout,
+      // UI state
+      currentPage, sidebarOpen, toast, currentModal, currentForm, formLoading, deleteConfirm,
+      // Data
+      health, devices, users, groups, notifications, supportRequests,
+      installers, engines, engineTypes, activations, countries, memberships, trainings, validations,
+      // Search
+      installerSearch, engineSearch, activationSearch, deviceSearch,
+      // Computed
+      menuItems, currentPageTitle, filteredInstallers, filteredEngines, filteredActivations, filteredDevices, deviceTypeIcon, deviceTypeName,
+      // Functions
+      showToast, closeModal, submitForm, confirmDelete, executeDelete, formatDate,
+      // CRUD functions
+      selectedDevice, deviceDetailModal, deviceFormModal, deviceForm, deviceFormLoading, commandLoading, currentCommand, lastCommandResult, openDeviceDetail, showAddDevice, editDevice, editDeviceFromDetail, submitDeviceForm, deleteDevice, sendDeviceCommand,
+      showAddActivation, editActivation, showAddCountry, editCountry, showAddMembership, editMembership,
+      showAddTraining, editTraining, showAddValidation, editValidation,
+      // Utils
+      window
+    };
+  }
+}).mount('#app');
+</script>
+</body>
+</html>

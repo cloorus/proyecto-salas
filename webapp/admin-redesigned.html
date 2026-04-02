@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BGnius VITA - Panel de Administración</title>
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        brand: { 
+          purple: '#7B2CBF', 
+          'purple-dark': '#5C218F',
+          'purple-light': '#F2EAF9',
+          'purple-mid': '#D6BEEB',
+          blue: '#0072BC', 
+          'dark-blue': '#303F9F',
+          bg: '#F5F5F5',
+          card: '#FFFFFF',
+          text: '#212121',
+          'text-secondary': '#757575',
+        }
+      },
+      fontFamily: {
+        sans: ['Montserrat', 'system-ui', 'sans-serif'],
+      },
+      borderRadius: {
+        'card': '12px',
+        'pill': '25px',
+      },
+      boxShadow: {
+        'card': '0 2px 8px rgba(0,0,0,0.08)',
+        'header': '0 1px 4px rgba(0,0,0,0.06)',
+      }
+    }
+  }
+}
+</script>
+<style>
+[v-cloak] { display: none; }
+body { font-family: 'Montserrat', system-ui, sans-serif; background: #F5F5F5; }
+.sidebar-link { transition: all 0.15s; border-left: 3px solid transparent; }
+.sidebar-link:hover { background: #F2EAF9; color: #7B2CBF; }
+.sidebar-link.active { background: #F2EAF9; border-left: 3px solid #7B2CBF; color: #7B2CBF; font-weight: 600; }
+.fade-enter-active, .fade-leave-active { transition: opacity 0.2s; }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #F5F5F5; }
+::-webkit-scrollbar-thumb { background: #D6BEEB; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #7B2CBF; }
+.stat-card { transition: transform 0.2s; }
+.stat-card:hover { transform: translateY(-2px); }
+.modal { backdrop-filter: blur(5px); }
+.material-icons { font-size: inherit; vertical-align: middle; }
+.material-icons.icon-sm { font-size: 18px; }
+.material-icons.icon-md { font-size: 24px; }
+.material-icons.icon-lg { font-size: 32px; }
+.material-icons.icon-xl { font-size: 48px; }
+.material-icons.icon-2xl { font-size: 64px; }
+.btn-primary { background: #7B2CBF; color: white; border-radius: 25px; transition: background 0.2s; }
+.btn-primary:hover { background: #5C218F; }
+.btn-primary:disabled { background: #D6BEEB; }
+</style>
+</head>
+<body class="bg-brand-bg min-h-screen">
+<div id="app" v-cloak>
+
+<!-- LOGIN -->
+<div v-if="!token" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-brand-purple to-brand-dark-blue">
+  <div class="bg-white rounded-card shadow-card p-8 w-full max-w-md">
+    <div class="text-center mb-6">
+      <span class="material-icons text-brand-purple" style="font-size:48px">lock</span>
+      <h1 class="text-2xl font-bold text-brand-text mt-2">BGnius VITA</h1>
+      <p class="text-brand-text-secondary text-sm">Panel de Administración</p>
+    </div>
+    <form @submit.prevent="login">
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-brand-text mb-1">Correo electrónico</label>
+        <input v-model="loginForm.email" type="email" required class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-purple focus:border-transparent" placeholder="admin@bgnius.com">
+      </div>
+      <div class="mb-6">
+        <label class="block text-sm font-medium text-brand-text mb-1">Contraseña</label>
+        <input v-model="loginForm.password" type="password" required class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-purple focus:border-transparent">
+      </div>
+      <div v-if="loginError" class="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{{ loginError }}</div>
+      <button type="submit" :disabled="loginLoading" class="w-full btn-primary font-semibold py-2.5">
+        {{ loginLoading ? 'Ingresando...' : 'Iniciar Sesión' }}
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div v-else class="flex min-h-screen">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white flex-shrink-0 flex flex-col fixed h-full z-30 shadow-card" :class="{ '-translate-x-full': !sidebarOpen, 'translate-x-0': sidebarOpen }" style="transition: transform 0.2s">
+    <div class="p-4 border-b border-gray-100">
+      <div class="flex items-center gap-2">
+        <span class="material-icons text-brand-purple icon-md">home</span>
+        <h1 class="text-xl font-bold text-brand-text">BGnius VITA</h1>
+      </div>
+      <p class="text-xs text-brand-text-secondary mt-1 ml-8">Panel de Administración</p>
+    </div>
+    <nav class="flex-1 py-2 overflow-y-auto">
+      <a v-for="item in menuItems" :key="item.id" @click="currentPage=item.id; sidebarOpen=window.innerWidth>768"
+         class="sidebar-link flex items-center gap-3 px-4 py-2.5 cursor-pointer text-sm text-brand-text-secondary" :class="{ active: currentPage===item.id }">
+        <span class="material-icons icon-sm">{{ item.icon }}</span>
+        <span>{{ item.label }}</span>
+      </a>
+    </nav>
+    <div class="p-4 border-t border-gray-100">
+      <div class="text-xs text-brand-text-secondary mb-2">{{ userEmail }}</div>
+      <button @click="logout" class="text-xs text-red-500 hover:text-red-700 flex items-center gap-1">
+        <span class="material-icons icon-sm">logout</span> Cerrar Sesión
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="flex-1 ml-64">
+    <!-- Top bar -->
+    <header class="bg-white shadow-header px-6 py-3 flex items-center justify-between sticky top-0 z-20">
+      <button @click="sidebarOpen=!sidebarOpen" class="lg:hidden text-brand-text-secondary">
+        <span class="material-icons">menu</span>
+      </button>
+      <h2 class="text-lg font-semibold text-brand-text">{{ currentPageTitle }}</h2>
+      <div class="flex items-center gap-3">
+        <span class="text-xs px-3 py-1 rounded-full flex items-center gap-1" :class="health.status==='healthy'?'bg-green-50 text-green-700':'bg-yellow-50 text-yellow-700'">
+          <span class="inline-block w-2 h-2 rounded-full" :class="health.status==='healthy'?'bg-green-500':'bg-yellow-500'"></span>
+          {{ health.status==='healthy'?'Online':'Degradado' }}
+        </span>
+      </div>
+    </header>
+
+    <div class="p-6">
+
+      <!-- DASHBOARD -->
+      <div v-if="currentPage==='dashboard'">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div class="stat-card bg-white rounded-card p-5 shadow-card">
+            <div class="flex items-center justify-between mb-2">
+              <span class="material-icons icon-lg text-brand-purple">devices</span>
+            </div>
+            <div class="text-sm text-brand-text-secondary mb-1">Dispositivos</div>
+            <div class="text-2xl font-bold text-brand-text">{{ devices.length }}</div>
+          </div>
+          <div class="stat-card bg-white rounded-card p-5 shadow-card">
+            <div class="flex items-center justify-between mb-2">
+              <span class="material-icons icon-lg text-brand-blue">group</span>
+            </div>
+            <div class="text-sm text-brand-text-secondary mb-1">Usuarios</div>
+            <div class="text-2xl font-bold text-brand-text">{{ users.length }}</div>
+          </div>
+          <div class="stat-card bg-white rounded-card p-5 shadow-card">
+            <div class="flex items-center justify-between mb-2">
+              <span class="material-icons icon-lg text-brand-dark-blue">engineering</span>
+            </div>
+            <div class="text-sm text-brand-text-secondary mb-1">Instaladores</div>
+            <div class="text-2xl font-bold text-brand-text">{{ installers.length }}</div>
+          </div>
+          <div class="stat-card bg-white rounded-card p-5 shadow-card">
+            <div class="flex items-center justify-between mb-2">
+              <span class="material-icons icon-lg text-green-600">vpn_key</span>
+            </div>
+            <div class="text-sm text-brand-text-secondary mb-1">Activaciones</div>
+            <div class="text-2xl font-bold text-brand-text">{{ activations.length }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INSTALLERS -->
+      <div v-if="currentPage==='installers'">
+        <div class="bg-white rounded-card p-5 shadow-card">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-semibold text-brand-text">Gestión de Instaladores</h3>
+            <button @click="showAddInstaller" class="btn-primary px-4 py-2 text-sm flex items-center gap-1">
+              <span class="material-icons icon-sm">add</span> Agregar Instalador
+            </button>
+          </div>
+          <div class="mb-4">
+            <input v-model="installerSearch" placeholder="Buscar instaladores..." 
+              class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-purple focus:border-transparent">
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b border-gray-100">
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">ID</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Identificación</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Nombre</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Email</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">País</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Estado</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="installer in filteredInstallers" :key="installer.id" class="border-b border-gray-50 hover:bg-brand-purple-light">
+                  <td class="py-2">{{ installer.id }}</td>
+                  <td class="py-2">{{ installer.identify }}</td>
+                  <td class="py-2 font-medium">{{ installer.name }}</td>
+                  <td class="py-2">{{ installer.email }}</td>
+                  <td class="py-2">{{ installer.country_name || 'N/A' }}</td>
+                  <td class="py-2">
+                    <span :class="installer.is_active ? 'text-green-600 bg-green-50' : 'text-red-600 bg-red-50'" 
+                      class="px-2 py-1 rounded-full text-xs">
+                      {{ installer.is_active ? 'Activo' : 'Inactivo' }}
+                    </span>
+                  </td>
+                  <td class="py-2">
+                    <button @click="editInstaller(installer)" class="text-brand-blue hover:bg-blue-50 px-2 py-1 rounded text-xs mr-1">
+                      <span class="material-icons icon-sm">edit</span>
+                    </button>
+                    <button @click="confirmDelete('installer', installer)" class="text-red-500 hover:bg-red-50 px-2 py-1 rounded text-xs">
+                      <span class="material-icons icon-sm">delete</span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ENGINES -->
+      <div v-if="currentPage==='engines'">
+        <div class="bg-white rounded-card p-5 shadow-card">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-semibold text-brand-text">Gestión de Motores</h3>
+            <button @click="showAddEngine" class="btn-primary px-4 py-2 text-sm flex items-center gap-1">
+              <span class="material-icons icon-sm">add</span> Agregar Motor
+            </button>
+          </div>
+          <div class="mb-4">
+            <input v-model="engineSearch" placeholder="Buscar motores..." 
+              class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-purple focus:border-transparent">
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b border-gray-100">
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">ID</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Modelo</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Tipo</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Marca</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">PCB</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="engine in filteredEngines" :key="engine.id" class="border-b border-gray-50 hover:bg-brand-purple-light">
+                  <td class="py-2">{{ engine.id }}</td>
+                  <td class="py-2 font-medium">{{ engine.model }}</td>
+                  <td class="py-2">{{ engine.engine_type_name || 'N/A' }}</td>
+                  <td class="py-2">{{ engine.brand || 'N/A' }}</td>
+                  <td class="py-2">{{ engine.pcb || 'N/A' }}</td>
+                  <td class="py-2">
+                    <button @click="editEngine(engine)" class="text-brand-blue hover:bg-blue-50 px-2 py-1 rounded text-xs mr-1">
+                      <span class="material-icons icon-sm">edit</span>
+                    </button>
+                    <button @click="confirmDelete('engine', engine)" class="text-red-500 hover:bg-red-50 px-2 py-1 rounded text-xs">
+                      <span class="material-icons icon-sm">delete</span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ENGINE TYPES -->
+      <div v-if="currentPage==='engine-types'">
+        <div class="bg-white rounded-card p-5 shadow-card">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-semibold text-brand-text">Tipos de Motor</h3>
+            <button @click="showAddEngineType" class="btn-primary px-4 py-2 text-sm flex items-center gap-1">
+              <span class="material-icons icon-sm">add</span> Agregar Tipo
+            </button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b border-gray-100">
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">ID</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Nombre</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Creado</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="type in engineTypes" :key="type.id" class="border-b border-gray-50 hover:bg-brand-purple-light">
+                  <td class="py-2">{{ type.id }}</td>
+                  <td class="py-2 font-medium">{{ type.name }}</td>
+                  <td class="py-2">{{ formatDate(type.created_at) }}</td>
+                  <td class="py-2">
+                    <button @click="editEngineType(type)" class="text-brand-blue hover:bg-blue-50 px-2 py-1 rounded text-xs mr-1">
+                      <span class="material-icons icon-sm">edit</span>
+                    </button>
+                    <button @click="confirmDelete('engine-type', type)" class="text-red-500 hover:bg-red-50 px-2 py-1 rounded text-xs">
+                      <span class="material-icons icon-sm">delete</span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTIVATIONS -->
+      <div v-if="currentPage==='activations'">
+        <div class="bg-white rounded-card p-5 shadow-card">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-semibold text-brand-text">Activaciones de Dispositivos</h3>
+            <button @click="showAddActivation" class="btn-primary px-4 py-2 text-sm flex items-center gap-1">
+              <span class="material-icons icon-sm">add</span> Nueva Activación
+            </button>
+          </div>
+          <div class="mb-4">
+            <input v-model="activationSearch" placeholder="Buscar activaciones..." 
+              class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-purple focus:border-transparent">
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b border-gray-100">
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">ID</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Instalador</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Motor</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Serial VITA</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Fecha</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="activation in filteredActivations" :key="activation.id" class="border-b border-gray-50 hover:bg-brand-purple-light">
+                  <td class="py-2">{{ activation.id }}</td>
+                  <td class="py-2 font-medium">{{ activation.installer_name }}</td>
+                  <td class="py-2">{{ activation.engine_model }}</td>
+                  <td class="py-2">{{ activation.vita_serial || 'N/A' }}</td>
+                  <td class="py-2">{{ formatDate(activation.activation_date) }}</td>
+                  <td class="py-2">
+                    <button @click="editActivation(activation)" class="text-brand-blue hover:bg-blue-50 px-2 py-1 rounded text-xs mr-1">
+                      <span class="material-icons icon-sm">edit</span>
+                    </button>
+                    <button @click="confirmDelete('activation', activation)" class="text-red-500 hover:bg-red-50 px-2 py-1 rounded text-xs">
+                      <span class="material-icons icon-sm">delete</span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- COUNTRIES -->
+      <div v-if="currentPage==='countries'">
+        <div class="bg-white rounded-card p-5 shadow-card">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-semibold text-brand-text">Países</h3>
+            <button @click="showAddCountry" class="btn-primary px-4 py-2 text-sm flex items-center gap-1">
+              <span class="material-icons icon-sm">add</span> Agregar País
+            </button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b border-gray-100">
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">ID</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Nombre</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Código Regional</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="country in countries" :key="country.id" class="border-b border-gray-50 hover:bg-brand-purple-light">
+                  <td class="py-2">{{ country.id }}</td>
+                  <td class="py-2 font-medium">{{ country.name }}</td>
+                  <td class="py-2">{{ country.region_code || 'N/A' }}</td>
+                  <td class="py-2">
+                    <button @click="editCountry(country)" class="text-brand-blue hover:bg-blue-50 px-2 py-1 rounded text-xs mr-1">
+                      <span class="material-icons icon-sm">edit</span>
+                    </button>
+                    <button @click="confirmDelete('country', country)" class="text-red-500 hover:bg-red-50 px-2 py-1 rounded text-xs">
+                      <span class="material-icons icon-sm">delete</span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- MEMBERSHIPS -->
+      <div v-if="currentPage==='memberships'">
+        <div class="bg-white rounded-card p-5 shadow-card">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-semibold text-brand-text">Membresías</h3>
+            <button @click="showAddMembership" class="btn-primary px-4 py-2 text-sm flex items-center gap-1">
+              <span class="material-icons icon-sm">add</span> Nueva Membresía
+            </button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b border-gray-100">
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">ID</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Instalador</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Tipo</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Pago</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Vencimiento</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="membership in memberships" :key="membership.id" class="border-b border-gray-50 hover:bg-brand-purple-light">
+                  <td class="py-2">{{ membership.id }}</td>
+                  <td class="py-2 font-medium">{{ membership.installer_name }}</td>
+                  <td class="py-2">{{ membership.membership_type || 'N/A' }}</td>
+                  <td class="py-2">{{ formatDate(membership.payment_date) }}</td>
+                  <td class="py-2">{{ formatDate(membership.expiry_date) }}</td>
+                  <td class="py-2">
+                    <button @click="editMembership(membership)" class="text-brand-blue hover:bg-blue-50 px-2 py-1 rounded text-xs mr-1">
+                      <span class="material-icons icon-sm">edit</span>
+                    </button>
+                    <button @click="confirmDelete('membership', membership)" class="text-red-500 hover:bg-red-50 px-2 py-1 rounded text-xs">
+                      <span class="material-icons icon-sm">delete</span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TRAININGS -->
+      <div v-if="currentPage==='trainings'">
+        <div class="bg-white rounded-card p-5 shadow-card">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-semibold text-brand-text">Capacitaciones</h3>
+            <button @click="showAddTraining" class="btn-primary px-4 py-2 text-sm flex items-center gap-1">
+              <span class="material-icons icon-sm">add</span> Nueva Capacitación
+            </button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b border-gray-100">
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">ID</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Instalador</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Tipo</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Capacitación</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Fecha</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="training in trainings" :key="training.id" class="border-b border-gray-50 hover:bg-brand-purple-light">
+                  <td class="py-2">{{ training.id }}</td>
+                  <td class="py-2 font-medium">{{ training.installer_name }}</td>
+                  <td class="py-2">{{ training.training_type || 'N/A' }}</td>
+                  <td class="py-2">{{ training.training_name || 'N/A' }}</td>
+                  <td class="py-2">{{ formatDate(training.date) }}</td>
+                  <td class="py-2">
+                    <button @click="editTraining(training)" class="text-brand-blue hover:bg-blue-50 px-2 py-1 rounded text-xs mr-1">
+                      <span class="material-icons icon-sm">edit</span>
+                    </button>
+                    <button @click="confirmDelete('training', training)" class="text-red-500 hover:bg-red-50 px-2 py-1 rounded text-xs">
+                      <span class="material-icons icon-sm">delete</span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- VALIDATIONS -->
+      <div v-if="currentPage==='validations'">
+        <div class="bg-white rounded-card p-5 shadow-card">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-semibold text-brand-text">Validaciones</h3>
+            <button @click="showAddValidation" class="btn-primary px-4 py-2 text-sm flex items-center gap-1">
+              <span class="material-icons icon-sm">add</span> Nueva Validación
+            </button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b border-gray-100">
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">ID</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Instalador</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Validado por</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Fecha</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="validation in validations" :key="validation.id" class="border-b border-gray-50 hover:bg-brand-purple-light">
+                  <td class="py-2">{{ validation.id }}</td>
+                  <td class="py-2 font-medium">{{ validation.installer_name }}</td>
+                  <td class="py-2">{{ validation.validated_by_name || 'N/A' }}</td>
+                  <td class="py-2">{{ formatDate(validation.date) }}</td>
+                  <td class="py-2">
+                    <button @click="editValidation(validation)" class="text-brand-blue hover:bg-blue-50 px-2 py-1 rounded text-xs mr-1">
+                      <span class="material-icons icon-sm">edit</span>
+                    </button>
+                    <button @click="confirmDelete('validation', validation)" class="text-red-500 hover:bg-red-50 px-2 py-1 rounded text-xs">
+                      <span class="material-icons icon-sm">delete</span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DEVICES -->
+      <div v-if="currentPage==='devices'">
+        <div class="bg-white rounded-card p-5 shadow-card">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-semibold text-brand-text">Gestion de Dispositivos</h3>
+            <button @click="showAddDevice" class="btn-primary px-4 py-2 text-sm flex items-center gap-1">
+              <span class="material-icons icon-sm">add</span> Agregar Dispositivo
+            </button>
+          </div>
+          <div class="mb-4">
+            <input v-model="deviceSearch" placeholder="Buscar dispositivos..." 
+              class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-purple focus:border-transparent">
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b border-gray-100">
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">ID</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Serial</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Nombre</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Tipo</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Ubicacion</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Estado</th>
+                  <th class="text-left py-2 text-brand-text-secondary font-medium">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="device in filteredDevices" :key="device.id" class="border-b border-gray-50 hover:bg-brand-purple-light cursor-pointer" @dblclick="openDeviceDetail(device)">
+                  <td class="py-2">{{ device.id }}</td>
+                  <td class="py-2 font-mono text-xs">{{ device.serial_number }}</td>
+                  <td class="py-2 font-medium">{{ device.name }}</td>
+                  <td class="py-2">
+                    <span class="material-icons icon-sm text-brand-text-secondary mr-1">{{ deviceTypeMatIcon(device.device_type) }}</span>
+                    {{ deviceTypeName(device.device_type) }}
+                  </td>
+                  <td class="py-2">{{ device.location || 'N/A' }}</td>
+                  <td class="py-2">
+                    <span class="flex items-center gap-1">
+                      <span class="inline-block w-2 h-2 rounded-full" :class="device.is_online ? 'bg-green-500' : 'bg-gray-400'"></span>
+                      <span :class="device.is_online ? 'text-green-600' : 'text-gray-500'" class="text-xs">
+                        {{ device.is_online ? 'Online' : 'Offline' }}
+                      </span>
+                    </span>
+                  </td>
+                  <td class="py-2">
+                    <button @click.stop="openDeviceDetail(device)" class="text-brand-purple hover:bg-brand-purple-light px-2 py-1 rounded text-xs mr-1">
+                      <span class="material-icons icon-sm">visibility</span>
+                    </button>
+                    <button @click.stop="editDevice(device)" class="text-brand-blue hover:bg-blue-50 px-2 py-1 rounded text-xs mr-1">
+                      <span class="material-icons icon-sm">edit</span>
+                    </button>
+                    <button @click.stop="deleteDevice(device)" class="text-red-500 hover:bg-red-50 px-2 py-1 rounded text-xs">
+                      <span class="material-icons icon-sm">delete</span>
+                    </button>
+                  </td>
+                </tr>
+                <tr v-if="filteredDevices.length===0"><td colspan="7" class="py-8 text-center text-brand-text-secondary">No se encontraron dispositivos</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="text-xs text-brand-text-secondary mt-2">Doble clic en una fila para ver detalles completos</p>
+        </div>
+      </div>
+
+      <!-- DEVICE DETAIL MODAL -->
+      <div v-if="deviceDetailModal && selectedDevice" class="modal fixed inset-0 bg-black/50 flex items-center justify-center z-50" @click.self="deviceDetailModal=false">
+        <div class="bg-white rounded-card p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-card">
+          <div class="flex justify-between items-center mb-4">
+            <h4 class="font-bold text-lg text-brand-text">Detalle del Dispositivo</h4>
+            <button @click="deviceDetailModal=false" class="text-brand-text-secondary hover:text-brand-text">
+              <span class="material-icons">close</span>
+            </button>
+          </div>
+          <div class="text-center mb-6">
+            <span class="material-icons icon-2xl text-brand-purple">{{ deviceTypeMatIcon(selectedDevice.device_type) }}</span>
+            <div class="text-xl font-bold text-brand-text mt-2">{{ selectedDevice.name }}</div>
+            <div class="text-sm text-brand-text-secondary">{{ deviceTypeName(selectedDevice.device_type) }}</div>
+            <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm mt-2" :class="selectedDevice.is_online ? 'text-green-600 bg-green-50' : 'text-gray-500 bg-gray-100'">
+              <span class="inline-block w-2 h-2 rounded-full" :class="selectedDevice.is_online ? 'bg-green-500' : 'bg-gray-400'"></span>
+              {{ selectedDevice.is_online ? 'Online' : 'Offline' }}
+            </span>
+          </div>
+          <div class="grid grid-cols-2 gap-4 text-sm">
+            <div><span class="text-brand-text-secondary">ID:</span> <span class="font-medium">{{ selectedDevice.id }}</span></div>
+            <div><span class="text-brand-text-secondary">Serial:</span> <span class="font-mono">{{ selectedDevice.serial_number }}</span></div>
+            <div><span class="text-brand-text-secondary">MAC:</span> <span class="font-mono">{{ selectedDevice.mac_address || 'N/A' }}</span></div>
+            <div><span class="text-brand-text-secondary">Modelo:</span> <span>{{ selectedDevice.model || 'N/A' }}</span></div>
+            <div><span class="text-brand-text-secondary">Ubicacion:</span> <span>{{ selectedDevice.location || 'N/A' }}</span></div>
+            <div><span class="text-brand-text-secondary">Firmware:</span> <span>{{ selectedDevice.firmware_version || 'N/A' }}</span></div>
+            <div><span class="text-brand-text-secondary">Estado Motor:</span> <span>{{ selectedDevice.motor_status_name || selectedDevice.motor_status || 'N/A' }}</span></div>
+            <div><span class="text-brand-text-secondary">Owner ID:</span> <span>{{ selectedDevice.owner_id || 'N/A' }}</span></div>
+            <div class="col-span-2"><span class="text-brand-text-secondary">Descripcion:</span> <span>{{ selectedDevice.description || 'Sin descripcion' }}</span></div>
+            <div><span class="text-brand-text-secondary">Ultima conexion:</span> <span>{{ formatDate(selectedDevice.last_seen) }}</span></div>
+            <div><span class="text-brand-text-secondary">Creado:</span> <span>{{ formatDate(selectedDevice.created_at) }}</span></div>
+            <div><span class="text-brand-text-secondary">Actualizado:</span> <span>{{ formatDate(selectedDevice.updated_at) }}</span></div>
+          </div>
+          <div v-if="selectedDevice._full && selectedDevice._full.parameters" class="mt-4">
+            <h5 class="font-semibold text-brand-text mb-2">Parametros</h5>
+            <pre class="bg-brand-bg p-3 rounded-lg text-xs overflow-auto max-h-40">{{ JSON.stringify(selectedDevice._full.parameters, null, 2) }}</pre>
+          </div>
+          <div v-if="selectedDevice._full && selectedDevice._full.users && selectedDevice._full.users.length" class="mt-4">
+            <h5 class="font-semibold text-brand-text mb-2">Usuarios asociados</h5>
+            <div v-for="u in selectedDevice._full.users" :key="u.id" class="text-sm text-brand-text-secondary">{{ u.name || u.email || u.id }}</div>
+          </div>
+          <div class="flex justify-end gap-2 mt-6">
+          <!-- DEVICE CONTROL BUTTONS -->
+          <div v-if="selectedDevice.is_online" class="mt-4 border-t border-gray-100 pt-4">
+            <h5 class="font-semibold text-brand-text mb-3">Control del Dispositivo</h5>
+            <div class="grid grid-cols-2 gap-3">
+              <button @click="sendDeviceCommand(selectedDevice.id, 'OPEN')" 
+                      :disabled="commandLoading" 
+                      class="bg-green-500 hover:bg-green-600 disabled:bg-gray-300 text-white px-3 py-2 rounded-pill text-sm flex items-center justify-center gap-2">
+                <span class="material-icons icon-sm" v-if="commandLoading && currentCommand === 'OPEN'">sync</span>
+                <span class="material-icons icon-sm" v-else>lock_open</span>
+                ABRIR
+              </button>
+              <button @click="sendDeviceCommand(selectedDevice.id, 'CLOSE')" 
+                      :disabled="commandLoading" 
+                      class="bg-red-500 hover:bg-red-600 disabled:bg-gray-300 text-white px-3 py-2 rounded-pill text-sm flex items-center justify-center gap-2">
+                <span class="material-icons icon-sm" v-if="commandLoading && currentCommand === 'CLOSE'">sync</span>
+                <span class="material-icons icon-sm" v-else>lock</span>
+                CERRAR
+              </button>
+              <button @click="sendDeviceCommand(selectedDevice.id, 'STOP')" 
+                      :disabled="commandLoading" 
+                      class="bg-orange-500 hover:bg-orange-600 disabled:bg-gray-300 text-white px-3 py-2 rounded-pill text-sm flex items-center justify-center gap-2">
+                <span class="material-icons icon-sm" v-if="commandLoading && currentCommand === 'STOP'">sync</span>
+                <span class="material-icons icon-sm" v-else>pause</span>
+                PARAR
+              </button>
+              <button @click="sendDeviceCommand(selectedDevice.id, 'PEDESTRIAN')" 
+                      :disabled="commandLoading" 
+                      class="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 text-white px-3 py-2 rounded-pill text-sm flex items-center justify-center gap-2">
+                <span class="material-icons icon-sm" v-if="commandLoading && currentCommand === 'PEDESTRIAN'">sync</span>
+                <span class="material-icons icon-sm" v-else>directions_walk</span>
+                PEATONAL
+              </button>
+            </div>
+            <div v-if="lastCommandResult" class="mt-3 p-2 rounded-lg text-sm" 
+                 :class="lastCommandResult.success ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'">
+              {{ lastCommandResult.message }}
+            </div>
+          </div>
+          <div v-else class="mt-4 border-t border-gray-100 pt-4">
+            <div class="text-center text-brand-text-secondary text-sm flex items-center justify-center gap-2">
+              <span class="material-icons icon-sm">power_off</span> Dispositivo desconectado - controles no disponibles
+            </div>
+          </div>
+          <div class="flex justify-end gap-2 mt-6">
+            <button @click="editDeviceFromDetail" class="btn-primary px-4 py-2 text-sm">Editar</button>
+            <button @click="deviceDetailModal=false" class="px-4 py-2 text-brand-text-secondary hover:bg-gray-100 rounded-pill text-sm">Cerrar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- DEVICE FORM MODAL -->
+      <div v-if="deviceFormModal" class="modal fixed inset-0 bg-black/50 flex items-center justify-center z-50" @click.self="deviceFormModal=null">
+        <div class="bg-white rounded-card p-6 w-full max-w-md max-h-[90vh] overflow-y-auto shadow-card">
+          <div class="flex justify-between items-center mb-4">
+            <h4 class="font-bold text-brand-text">{{ deviceFormModal.title }}</h4>
+            <button @click="deviceFormModal=null" class="text-brand-text-secondary hover:text-brand-text">
+              <span class="material-icons">close</span>
+            </button>
+          </div>
+          <form @submit.prevent="submitDeviceForm">
+            <div v-if="!deviceFormModal.isEdit" class="mb-4">
+              <label class="block text-sm font-medium text-brand-text mb-1">Numero de Serie *</label>
+              <input v-model="deviceForm.serial_number" type="text" required class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-purple focus:border-transparent">
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-brand-text mb-1">Nombre *</label>
+              <input v-model="deviceForm.name" type="text" required class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-purple focus:border-transparent">
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-brand-text mb-1">Tipo de Dispositivo *</label>
+              <select v-model="deviceForm.device_type" required class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-purple focus:border-transparent">
+                <option value="gate">Porton</option>
+                <option value="barrier">Barrera</option>
+                <option value="door">Puerta</option>
+                <option value="turnstile">Torniquete</option>
+              </select>
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-brand-text mb-1">Descripcion</label>
+              <textarea v-model="deviceForm.description" rows="2" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-purple focus:border-transparent"></textarea>
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-brand-text mb-1">Ubicacion</label>
+              <input v-model="deviceForm.location" type="text" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-purple focus:border-transparent">
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-brand-text mb-1">Modelo</label>
+              <input v-model="deviceForm.model" type="text" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-purple focus:border-transparent">
+            </div>
+            <div v-if="!deviceFormModal.isEdit" class="mb-4">
+              <label class="block text-sm font-medium text-brand-text mb-1">Direccion MAC</label>
+              <input v-model="deviceForm.mac_address" type="text" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-purple focus:border-transparent" placeholder="AA:BB:CC:DD:EE:FF">
+            </div>
+            <div class="flex justify-end gap-2 mt-6">
+              <button type="button" @click="deviceFormModal=null" class="px-4 py-2 text-brand-text-secondary hover:bg-gray-100 rounded-pill">Cancelar</button>
+              <button type="submit" :disabled="deviceFormLoading" class="btn-primary px-4 py-2">
+                {{ deviceFormLoading ? 'Guardando...' : (deviceFormModal.isEdit ? 'Actualizar' : 'Crear') }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Generic Modal for Forms -->
+<div v-if="currentModal" class="modal fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-card p-6 w-full max-w-md max-h-90vh overflow-y-auto shadow-card">
+    <div class="flex justify-between items-center mb-4">
+      <h4 class="font-bold text-brand-text">{{ currentModal.title }}</h4>
+      <button @click="closeModal" class="text-brand-text-secondary hover:text-brand-text">
+        <span class="material-icons">close</span>
+      </button>
+    </div>
+    <form @submit.prevent="submitForm">
+      <div v-for="field in currentModal.fields" :key="field.name" class="mb-4">
+        <label class="block text-sm font-medium text-brand-text mb-1">{{ field.label }}</label>
+        <select v-if="field.type === 'select'" v-model="currentForm[field.name]" 
+          class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-purple focus:border-transparent" 
+          :required="field.required">
+          <option value="">{{ field.placeholder || 'Seleccionar...' }}</option>
+          <option v-for="option in field.options" :key="option.value" :value="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+        <textarea v-else-if="field.type === 'textarea'" v-model="currentForm[field.name]" 
+          class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-purple focus:border-transparent" 
+          rows="3" :required="field.required" :placeholder="field.placeholder">
+        </textarea>
+        <input v-else v-model="currentForm[field.name]" :type="field.type || 'text'"
+          class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-purple focus:border-transparent" 
+          :required="field.required" :placeholder="field.placeholder">
+      </div>
+      <div class="flex justify-end gap-2 mt-6">
+        <button type="button" @click="closeModal" class="px-4 py-2 text-brand-text-secondary hover:bg-gray-100 rounded-pill">
+          Cancelar
+        </button>
+        <button type="submit" :disabled="formLoading" class="btn-primary px-4 py-2">
+          {{ formLoading ? 'Guardando...' : (currentModal.isEdit ? 'Actualizar' : 'Crear') }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Toast -->
+<div v-if="toast" class="fixed bottom-4 right-4 z-50 px-4 py-3 rounded-card shadow-card text-sm text-white flex items-center gap-2" :class="toast.type==='error'?'bg-red-500':'bg-green-500'">
+  <span class="material-icons icon-sm">{{ toast.type==='error' ? 'error' : 'check_circle' }}</span>
+  {{ toast.msg }}
+</div>
+
+<!-- Delete confirm -->
+<div v-if="deleteConfirm" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-card p-6 w-96 shadow-card">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="material-icons text-orange-500">warning</span>
+      <h4 class="font-bold text-brand-text">Confirmar eliminación</h4>
+    </div>
+    <p class="text-sm text-brand-text-secondary mb-4">¿Eliminar {{ deleteConfirm.name }}?</p>
+    <div class="flex gap-2">
+      <button @click="executeDelete" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-pill text-sm">Eliminar</button>
+      <button @click="deleteConfirm=null" class="text-brand-text-secondary hover:bg-gray-100 px-4 py-2 rounded-pill text-sm">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+const API = 'http://157.245.1.231:8000';
+const { createApp, ref, computed, onMounted } = Vue;
+
+createApp({
+  setup() {
+    const token = ref(localStorage.getItem('vita_token') || '');
+    const userEmail = ref(localStorage.getItem('vita_email') || '');
+    const loginForm = ref({ email: '', password: '' });
+    const loginError = ref('');
+    const loginLoading = ref(false);
+    const currentPage = ref('dashboard');
+    const sidebarOpen = ref(true);
+    const toast = ref(null);
+
+    // Data
+    const health = ref({ status: '', services: {}, version: '' });
+    const devices = ref([]);
+    const users = ref([]);
+    const groups = ref([]);
+    const notifications = ref([]);
+    const supportRequests = ref([]);
+
+    // Installer management data
+    const installers = ref([]);
+    const engines = ref([]);
+    const engineTypes = ref([]);
+    const activations = ref([]);
+    const countries = ref([]);
+    const memberships = ref([]);
+    const trainings = ref([]);
+    const validations = ref([]);
+
+    // Search filters
+    const installerSearch = ref('');
+    const engineSearch = ref('');
+    const activationSearch = ref('');
+    const deviceSearch = ref('');
+    const selectedDevice = ref(null);
+    const deviceDetailModal = ref(false);
+    const deviceFormModal = ref(null);
+    const deviceForm = ref({});
+    const deviceFormLoading = ref(false);
+
+    // Device control state
+    const commandLoading = ref(false);
+    const currentCommand = ref(null);
+    const lastCommandResult = ref(null);
+
+    // Modal system
+    const currentModal = ref(null);
+    const currentForm = ref({});
+    const formLoading = ref(false);
+    const deleteConfirm = ref(null);
+
+    const menuItems = [
+      { id: 'dashboard', icon: 'dashboard', label: 'Dashboard' },
+      { id: 'devices', icon: 'devices', label: 'Dispositivos' },
+      { id: 'users', icon: 'group', label: 'Usuarios' },
+      { id: 'groups', icon: 'folder', label: 'Grupos' },
+      { id: 'notifications', icon: 'notifications', label: 'Notificaciones' },
+      { id: 'support', icon: 'support_agent', label: 'Soporte' },
+      { id: 'installers', icon: 'engineering', label: 'Instaladores' },
+      { id: 'engines', icon: 'settings', label: 'Motores' },
+      { id: 'engine-types', icon: 'list_alt', label: 'Tipos de Motor' },
+      { id: 'activations', icon: 'vpn_key', label: 'Activaciones' },
+      { id: 'countries', icon: 'public', label: 'Países' },
+      { id: 'memberships', icon: 'card_membership', label: 'Membresías' },
+      { id: 'trainings', icon: 'school', label: 'Capacitaciones' },
+      { id: 'validations', icon: 'verified', label: 'Validaciones' },
+    ];
+
+    const currentPageTitle = computed(() => menuItems.find(m => m.id === currentPage.value)?.label || '');
+
+    // Computed filters
+    const filteredInstallers = computed(() => {
+      const s = installerSearch.value.toLowerCase();
+      return s ? installers.value.filter(i => 
+        i.name.toLowerCase().includes(s) || 
+        i.email.toLowerCase().includes(s) ||
+        i.identify.toLowerCase().includes(s)
+      ) : installers.value;
+    });
+
+    const filteredEngines = computed(() => {
+      const s = engineSearch.value.toLowerCase();
+      return s ? engines.value.filter(e => 
+        e.model.toLowerCase().includes(s) || 
+        (e.brand && e.brand.toLowerCase().includes(s))
+      ) : engines.value;
+    });
+
+    const filteredActivations = computed(() => {
+      const s = activationSearch.value.toLowerCase();
+      return s ? activations.value.filter(a => 
+        a.installer_name.toLowerCase().includes(s) || 
+        a.engine_model.toLowerCase().includes(s)
+      ) : activations.value;
+    });
+
+    const filteredDevices = computed(() => {
+      const s = deviceSearch.value.toLowerCase();
+      if (!s) return devices.value;
+      return devices.value.filter(d =>
+        (d.name && d.name.toLowerCase().includes(s)) ||
+        (d.serial_number && d.serial_number.toLowerCase().includes(s)) ||
+        (d.device_type && d.device_type.toLowerCase().includes(s)) ||
+        (d.location && d.location.toLowerCase().includes(s))
+      );
+    });
+
+    const deviceTypeMatIcon = (type) => {
+      const icons = { gate: 'garage', barrier: 'fence', door: 'door_front', turnstile: 'rotate_right' };
+      return icons[type] || 'devices';
+    };
+    const deviceTypeName = (type) => {
+      const names = { gate: 'Porton', barrier: 'Barrera', door: 'Puerta', turnstile: 'Torniquete' };
+      return names[type] || type || 'Desconocido';
+    };
+
+    // API functions
+    const api = async (path, opts = {}) => {
+      const headers = { 'Content-Type': 'application/json' };
+      if (token.value) headers['Authorization'] = 'Bearer ' + token.value;
+      const res = await fetch(API + path, { ...opts, headers: { ...headers, ...opts.headers } });
+      if (res.status === 401) { logout(); throw new Error('Unauthorized'); }
+      if (!res.ok) { 
+        const e = await res.json().catch(() => ({})); 
+        throw new Error(e.detail || res.statusText); 
+      }
+      return res.json();
+    };
+
+    const showToast = (msg, type = 'success') => { 
+      toast.value = { msg, type }; 
+      setTimeout(() => toast.value = null, 3000); 
+    };
+
+    // Auth functions
+    const login = async () => {
+      loginLoading.value = true; 
+      loginError.value = '';
+      try {
+        const data = await api('/api/v1/auth/login', { 
+          method: 'POST', 
+          body: JSON.stringify(loginForm.value) 
+        });
+        token.value = data.access_token;
+        userEmail.value = loginForm.value.email;
+        localStorage.setItem('vita_token', data.access_token);
+        localStorage.setItem('vita_email', loginForm.value.email);
+        loadAll();
+      } catch (e) { 
+        loginError.value = 'Credenciales inválidas'; 
+      }
+      loginLoading.value = false;
+    };
+
+    const logout = () => {
+      token.value = '';
+      userEmail.value = '';
+      localStorage.removeItem('vita_token');
+      localStorage.removeItem('vita_email');
+    };
+
+    // Data loading functions
+    const loadHealth = async () => {
+      try {
+        health.value = await api('/api/v1/health');
+      } catch (e) {
+        console.error('Health check failed:', e);
+      }
+    };
+
+    const loadInstallersData = async () => {
+      try {
+        const [
+          installersData,
+          enginesData, 
+          engineTypesData,
+          activationsData,
+          countriesData,
+          membershipsData,
+          trainingsData,
+          validationsData
+        ] = await Promise.all([
+          api('/api/v1/admin/installers'),
+          api('/api/v1/admin/engines'),
+          api('/api/v1/admin/engine-types'),
+          api('/api/v1/admin/activations'),
+          api('/api/v1/admin/countries'),
+          api('/api/v1/admin/memberships'),
+          api('/api/v1/admin/trainings'),
+          api('/api/v1/admin/validations')
+        ]);
+
+        installers.value = installersData.data || [];
+        engines.value = enginesData.data || [];
+        engineTypes.value = engineTypesData.data || [];
+        activations.value = activationsData.data || [];
+        countries.value = countriesData.data || [];
+        memberships.value = membershipsData.data || [];
+        trainings.value = trainingsData.data || [];
+        validations.value = validationsData.data || [];
+      } catch (e) {
+        showToast('Error al cargar datos de instaladores: ' + e.message, 'error');
+      }
+    };
+
+    const loadAll = async () => {
+      await loadHealth();
+      await loadInstallersData();
+      try {
+        const devData = await api('/api/v1/devices');
+        devices.value = devData.data || devData || [];
+      } catch (e) {
+        console.error('Error loading devices:', e);
+        devices.value = [];
+      }
+      try {
+        users.value = [];
+        groups.value = [];
+        notifications.value = [];
+        supportRequests.value = [];
+      } catch (e) {
+        console.error('Error loading data:', e);
+      }
+    };
+
+    // Modal functions
+    const openModal = (config) => {
+      currentModal.value = config;
+      currentForm.value = config.data || {};
+    };
+
+    const closeModal = () => {
+      currentModal.value = null;
+      currentForm.value = {};
+      formLoading.value = false;
+    };
+
+    const submitForm = async () => {
+      formLoading.value = true;
+      try {
+        const endpoint = currentModal.value.endpoint;
+        const method = currentModal.value.isEdit ? 'PUT' : 'POST';
+        const url = currentModal.value.isEdit ? `${endpoint}/${currentForm.value.id}` : endpoint;
+        
+        await api(url, {
+          method,
+          body: JSON.stringify(currentForm.value)
+        });
+
+        showToast(`${currentModal.value.entity} ${currentModal.value.isEdit ? 'actualizado' : 'creado'} exitosamente`);
+        closeModal();
+        await loadInstallersData();
+      } catch (e) {
+        showToast('Error: ' + e.message, 'error');
+      }
+      formLoading.value = false;
+    };
+
+    // CRUD functions for installers
+    const showAddInstaller = () => {
+      openModal({
+        title: 'Agregar Instalador',
+        entity: 'Instalador',
+        endpoint: '/api/v1/admin/installers',
+        isEdit: false,
+        fields: [
+          { name: 'identify', label: 'Identificación', type: 'text', required: true },
+          { name: 'name', label: 'Nombre', type: 'text', required: true },
+          { name: 'email', label: 'Correo electrónico', type: 'email', required: true },
+          { name: 'tel', label: 'Teléfono', type: 'text' },
+          { name: 'address', label: 'Dirección', type: 'textarea' },
+          { name: 'country_id', label: 'País', type: 'select', options: countries.value.map(c => ({ value: c.id, label: c.name })) },
+          { name: 'is_active', label: 'Activo', type: 'checkbox' }
+        ]
+      });
+    };
+
+    const editInstaller = (installer) => {
+      openModal({
+        title: 'Editar Instalador',
+        entity: 'Instalador',
+        endpoint: '/api/v1/admin/installers',
+        isEdit: true,
+        data: { ...installer },
+        fields: [
+          { name: 'identify', label: 'Identificación', type: 'text', required: true },
+          { name: 'name', label: 'Nombre', type: 'text', required: true },
+          { name: 'email', label: 'Correo electrónico', type: 'email', required: true },
+          { name: 'tel', label: 'Teléfono', type: 'text' },
+          { name: 'address', label: 'Dirección', type: 'textarea' },
+          { name: 'country_id', label: 'País', type: 'select', options: countries.value.map(c => ({ value: c.id, label: c.name })) },
+          { name: 'is_active', label: 'Activo', type: 'checkbox' }
+        ]
+      });
+    };
+
+    // CRUD functions for engines
+    const showAddEngine = () => {
+      openModal({
+        title: 'Agregar Motor',
+        entity: 'Motor',
+        endpoint: '/api/v1/admin/engines',
+        isEdit: false,
+        fields: [
+          { name: 'model', label: 'Modelo', type: 'text', required: true },
+          { name: 'engine_type_id', label: 'Tipo de Motor', type: 'select', options: engineTypes.value.map(t => ({ value: t.id, label: t.name })) },
+          { name: 'brand', label: 'Marca', type: 'text' },
+          { name: 'pcb', label: 'PCB', type: 'text' },
+          { name: 'documentation_url', label: 'URL de Documentación', type: 'url' }
+        ]
+      });
+    };
+
+    const editEngine = (engine) => {
+      openModal({
+        title: 'Editar Motor',
+        entity: 'Motor',
+        endpoint: '/api/v1/admin/engines',
+        isEdit: true,
+        data: { ...engine },
+        fields: [
+          { name: 'model', label: 'Modelo', type: 'text', required: true },
+          { name: 'engine_type_id', label: 'Tipo de Motor', type: 'select', options: engineTypes.value.map(t => ({ value: t.id, label: t.name })) },
+          { name: 'brand', label: 'Marca', type: 'text' },
+          { name: 'pcb', label: 'PCB', type: 'text' },
+          { name: 'documentation_url', label: 'URL de Documentación', type: 'url' }
+        ]
+      });
+    };
+
+    // CRUD functions for engine types
+    const showAddEngineType = () => {
+      openModal({
+        title: 'Agregar Tipo de Motor',
+        entity: 'Tipo de Motor',
+        endpoint: '/api/v1/admin/engine-types',
+        isEdit: false,
+        fields: [
+          { name: 'name', label: 'Nombre', type: 'text', required: true }
+        ]
+      });
+    };
+
+    const editEngineType = (type) => {
+      openModal({
+        title: 'Editar Tipo de Motor',
+        entity: 'Tipo de Motor',
+        endpoint: '/api/v1/admin/engine-types',
+        isEdit: true,
+        data: { ...type },
+        fields: [
+          { name: 'name', label: 'Nombre', type: 'text', required: true }
+        ]
+      });
+    };
+
+    // CRUD functions for activations
+    const showAddActivation = () => {
+      openModal({
+        title: 'Nueva Activación',
+        entity: 'Activación',
+        endpoint: '/api/v1/admin/activations',
+        isEdit: false,
+        fields: [
+          { name: 'installer_id', label: 'Instalador', type: 'select', required: true, options: installers.value.map(i => ({ value: i.id, label: i.name })) },
+          { name: 'engine_id', label: 'Motor', type: 'select', required: true, options: engines.value.map(e => ({ value: e.id, label: e.model })) },
+          { name: 'vita_serial', label: 'Serial VITA', type: 'text' },
+          { name: 'activation_date', label: 'Fecha de Activación', type: 'date', required: true },
+          { name: 'notes', label: 'Notas', type: 'textarea' }
+        ]
+      });
+    };
+
+    const editActivation = (activation) => {
+      openModal({
+        title: 'Editar Activación',
+        entity: 'Activación',
+        endpoint: '/api/v1/admin/activations',
+        isEdit: true,
+        data: { ...activation },
+        fields: [
+          { name: 'installer_id', label: 'Instalador', type: 'select', required: true, options: installers.value.map(i => ({ value: i.id, label: i.name })) },
+          { name: 'engine_id', label: 'Motor', type: 'select', required: true, options: engines.value.map(e => ({ value: e.id, label: e.model })) },
+          { name: 'vita_serial', label: 'Serial VITA', type: 'text' },
+          { name: 'activation_date', label: 'Fecha de Activación', type: 'date', required: true },
+          { name: 'notes', label: 'Notas', type: 'textarea' }
+        ]
+      });
+    };
+
+    // CRUD functions for countries
+    const showAddCountry = () => {
+      openModal({
+        title: 'Agregar País',
+        entity: 'País',
+        endpoint: '/api/v1/admin/countries',
+        isEdit: false,
+        fields: [
+          { name: 'name', label: 'Nombre', type: 'text', required: true },
+          { name: 'region_code', label: 'Código Regional', type: 'text' }
+        ]
+      });
+    };
+
+    const editCountry = (country) => {
+      openModal({
+        title: 'Editar País',
+        entity: 'País',
+        endpoint: '/api/v1/admin/countries',
+        isEdit: true,
+        data: { ...country },
+        fields: [
+          { name: 'name', label: 'Nombre', type: 'text', required: true },
+          { name: 'region_code', label: 'Código Regional', type: 'text' }
+        ]
+      });
+    };
+
+    // CRUD functions for memberships
+    const showAddMembership = () => {
+      openModal({
+        title: 'Nueva Membresía',
+        entity: 'Membresía',
+        endpoint: '/api/v1/admin/memberships',
+        isEdit: false,
+        fields: [
+          { name: 'installer_id', label: 'Instalador', type: 'select', required: true, options: installers.value.map(i => ({ value: i.id, label: i.name })) },
+          { name: 'payment_date', label: 'Fecha de Pago', type: 'date' },
+          { name: 'expiry_date', label: 'Fecha de Vencimiento', type: 'date' },
+          { name: 'membership_type', label: 'Tipo de Membresía', type: 'text' }
+        ]
+      });
+    };
+
+    const editMembership = (membership) => {
+      openModal({
+        title: 'Editar Membresía',
+        entity: 'Membresía',
+        endpoint: '/api/v1/admin/memberships',
+        isEdit: true,
+        data: { ...membership },
+        fields: [
+          { name: 'installer_id', label: 'Instalador', type: 'select', required: true, options: installers.value.map(i => ({ value: i.id, label: i.name })) },
+          { name: 'payment_date', label: 'Fecha de Pago', type: 'date' },
+          { name: 'expiry_date', label: 'Fecha de Vencimiento', type: 'date' },
+          { name: 'membership_type', label: 'Tipo de Membresía', type: 'text' }
+        ]
+      });
+    };
+
+    // CRUD functions for trainings
+    const showAddTraining = () => {
+      openModal({
+        title: 'Nueva Capacitación',
+        entity: 'Capacitación',
+        endpoint: '/api/v1/admin/trainings',
+        isEdit: false,
+        fields: [
+          { name: 'installer_id', label: 'Instalador', type: 'select', required: true, options: installers.value.map(i => ({ value: i.id, label: i.name })) },
+          { name: 'training_type', label: 'Tipo de Capacitación', type: 'text' },
+          { name: 'training_name', label: 'Nombre de la Capacitación', type: 'text' },
+          { name: 'date', label: 'Fecha', type: 'date' },
+          { name: 'description', label: 'Descripción', type: 'textarea' }
+        ]
+      });
+    };
+
+    const editTraining = (training) => {
+      openModal({
+        title: 'Editar Capacitación',
+        entity: 'Capacitación',
+        endpoint: '/api/v1/admin/trainings',
+        isEdit: true,
+        data: { ...training },
+        fields: [
+          { name: 'installer_id', label: 'Instalador', type: 'select', required: true, options: installers.value.map(i => ({ value: i.id, label: i.name })) },
+          { name: 'training_type', label: 'Tipo de Capacitación', type: 'text' },
+          { name: 'training_name', label: 'Nombre de la Capacitación', type: 'text' },
+          { name: 'date', label: 'Fecha', type: 'date' },
+          { name: 'description', label: 'Descripción', type: 'textarea' }
+        ]
+      });
+    };
+
+    // CRUD functions for validations
+    const showAddValidation = () => {
+      openModal({
+        title: 'Nueva Validación',
+        entity: 'Validación',
+        endpoint: '/api/v1/admin/validations',
+        isEdit: false,
+        fields: [
+          { name: 'installer_id', label: 'Instalador', type: 'select', required: true, options: installers.value.map(i => ({ value: i.id, label: i.name })) },
+          { name: 'validated_by_id', label: 'Validado por', type: 'select', options: installers.value.map(i => ({ value: i.id, label: i.name })) },
+          { name: 'date', label: 'Fecha', type: 'date', required: true },
+          { name: 'notes', label: 'Notas', type: 'textarea' }
+        ]
+      });
+    };
+
+    const editValidation = (validation) => {
+      openModal({
+        title: 'Editar Validación',
+        entity: 'Validación',
+        endpoint: '/api/v1/admin/validations',
+        isEdit: true,
+        data: { ...validation },
+        fields: [
+          { name: 'installer_id', label: 'Instalador', type: 'select', required: true, options: installers.value.map(i => ({ value: i.id, label: i.name })) },
+          { name: 'validated_by_id', label: 'Validado por', type: 'select', options: installers.value.map(i => ({ value: i.id, label: i.name })) },
+          { name: 'date', label: 'Fecha', type: 'date', required: true },
+          { name: 'notes', label: 'Notas', type: 'textarea' }
+        ]
+      });
+    };
+
+    // Device CRUD functions
+    const openDeviceDetail = async (device) => {
+      try {
+        const fullData = await api('/api/v1/devices/' + device.id + '/full');
+        selectedDevice.value = { ...device, ...fullData.device, _full: fullData };
+      } catch (e) {
+        selectedDevice.value = { ...device };
+      }
+      deviceDetailModal.value = true;
+    };
+
+    const showAddDevice = () => {
+      deviceForm.value = { serial_number: '', name: '', device_type: 'gate', description: '', location: '', model: '', mac_address: '' };
+      deviceFormModal.value = { title: 'Agregar Dispositivo', isEdit: false };
+    };
+
+    const editDevice = (device) => {
+      deviceForm.value = { id: device.id, name: device.name || '', description: device.description || '', location: device.location || '', model: device.model || '', device_type: device.device_type || 'gate' };
+      deviceFormModal.value = { title: 'Editar Dispositivo', isEdit: true };
+    };
+
+    const editDeviceFromDetail = () => {
+      editDevice(selectedDevice.value);
+    };
+
+    const submitDeviceForm = async () => {
+      deviceFormLoading.value = true;
+      try {
+        if (deviceFormModal.value.isEdit) {
+          const { id, ...body } = deviceForm.value;
+          await api('/api/v1/devices/' + id, { method: 'PUT', body: JSON.stringify(body) });
+          showToast('Dispositivo actualizado exitosamente');
+        } else {
+          await api('/api/v1/devices', { method: 'POST', body: JSON.stringify(deviceForm.value) });
+          showToast('Dispositivo creado exitosamente');
+        }
+        deviceFormModal.value = null;
+        const devData = await api('/api/v1/devices');
+        devices.value = devData.data || devData || [];
+        if (deviceDetailModal.value && selectedDevice.value) {
+          const updated = devices.value.find(d => d.id === selectedDevice.value.id);
+          if (updated) await openDeviceDetail(updated);
+        }
+      } catch (e) {
+        showToast('Error: ' + e.message, 'error');
+      }
+      deviceFormLoading.value = false;
+    };
+
+    // Device control functions
+    const sendDeviceCommand = async (deviceId, command) => {
+      commandLoading.value = true;
+      currentCommand.value = command;
+      lastCommandResult.value = null;
+      
+      try {
+        const result = await api(`/api/v1/devices/${deviceId}/command`, {
+          method: 'POST',
+          body: JSON.stringify({ command })
+        });
+        
+        const statusMsg = {
+          'OPEN': 'Comando ABRIR enviado',
+          'CLOSE': 'Comando CERRAR enviado',
+          'STOP': 'Comando PARAR enviado',
+          'PEDESTRIAN': 'Comando PEATONAL enviado'
+        };
+        
+        const success = result.status === 'completed' || result.status === 'failed';
+        lastCommandResult.value = {
+          success,
+          message: success ? `${statusMsg[command]} exitosamente` : `${statusMsg[command]} - ${result.response?.error || 'Error desconocido'}`
+        };
+        
+        showToast(lastCommandResult.value.message, success ? 'success' : 'error');
+        
+        setTimeout(() => {
+          lastCommandResult.value = null;
+        }, 5000);
+        
+      } catch (e) {
+        lastCommandResult.value = {
+          success: false,
+          message: `Error al enviar comando: ${e.message}`
+        };
+        showToast(lastCommandResult.value.message, 'error');
+      }
+      
+      commandLoading.value = false;
+      currentCommand.value = null;
+    };
+
+    const deleteDevice = (device) => {
+      deleteConfirm.value = { type: 'device', item: device, name: device.name || 'Dispositivo ID ' + device.id };
+    };
+
+    // Delete functions
+    const confirmDelete = (type, item) => {
+      deleteConfirm.value = {
+        type,
+        item,
+        name: item.name || item.model || item.installer_name || `${type} ID ${item.id}`
+      };
+    };
+
+    const executeDelete = async () => {
+      try {
+        const { type, item } = deleteConfirm.value;
+        let endpoint = '';
+        
+        switch (type) {
+          case 'installer': endpoint = `/api/v1/admin/installers/${item.id}`; break;
+          case 'engine': endpoint = `/api/v1/admin/engines/${item.id}`; break;
+          case 'engine-type': endpoint = `/api/v1/admin/engine-types/${item.id}`; break;
+          case 'activation': endpoint = `/api/v1/admin/activations/${item.id}`; break;
+          case 'country': endpoint = `/api/v1/admin/countries/${item.id}`; break;
+          case 'membership': endpoint = `/api/v1/admin/memberships/${item.id}`; break;
+          case 'training': endpoint = `/api/v1/admin/trainings/${item.id}`; break;
+          case 'validation': endpoint = `/api/v1/admin/validations/${item.id}`; break;
+          case 'device': endpoint = `/api/v1/devices/${item.id}`; break;
+        }
+
+        await api(endpoint, { method: 'DELETE' });
+        showToast('Elemento eliminado exitosamente');
+        deleteConfirm.value = null;
+        await loadInstallersData();
+        if (type === 'device') {
+          const devData = await api('/api/v1/devices');
+          devices.value = devData.data || devData || [];
+          deviceDetailModal.value = false;
+          selectedDevice.value = null;
+        }
+      } catch (e) {
+        showToast('Error al eliminar: ' + e.message, 'error');
+      }
+    };
+
+    // Utility functions
+    const formatDate = (dateStr) => {
+      if (!dateStr) return 'N/A';
+      try {
+        return new Date(dateStr).toLocaleDateString('es-ES');
+      } catch {
+        return dateStr;
+      }
+    };
+
+    // Initialize
+    onMounted(() => {
+      if (token.value) loadAll();
+    });
+
+    return {
+      // Auth
+      token, userEmail, loginForm, loginError, loginLoading, login, logout,
+      // UI state
+      currentPage, sidebarOpen, toast, currentModal, currentForm, formLoading, deleteConfirm,
+      // Data
+      health, devices, users, groups, notifications, supportRequests,
+      installers, engines, engineTypes, activations, countries, memberships, trainings, validations,
+      // Search
+      installerSearch, engineSearch, activationSearch, deviceSearch,
+      // Computed
+      menuItems, currentPageTitle, filteredInstallers, filteredEngines, filteredActivations, filteredDevices, deviceTypeMatIcon, deviceTypeName,
+      // Functions
+      showToast, closeModal, submitForm, confirmDelete, executeDelete, formatDate,
+      // CRUD functions
+      selectedDevice, deviceDetailModal, deviceFormModal, deviceForm, deviceFormLoading, commandLoading, currentCommand, lastCommandResult, openDeviceDetail, showAddDevice, editDevice, editDeviceFromDetail, submitDeviceForm, deleteDevice, sendDeviceCommand,
+      showAddInstaller, editInstaller, showAddEngine, editEngine, showAddEngineType, editEngineType,
+      showAddActivation, editActivation, showAddCountry, editCountry, showAddMembership, editMembership,
+      showAddTraining, editTraining, showAddValidation, editValidation,
+      // Utils
+      window
+    };
+  }
+}).mount('#app');
+</script>
+</body>
+</html>

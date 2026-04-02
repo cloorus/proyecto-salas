@@ -1,0 +1,235 @@
+# 🤖 Directivas de Proyecto - BGnius VITA Flutter
+
+**Contexto:** Desarrollo Flutter con hot reload en Android/Chrome emulator.  
+**Limitación:** El agente AI NO PUEDE VER el emulador - solo lee logs.  
+**Objetivo:** Cambios incrementales y seguros que el usuario pueda validar visualmente.
+
+---
+
+## 📋 REGLAS DE ORO
+
+### 1. **Prioridad de UI** ✅
+**PERMITIDO modificar:**
+- ✅ `lib/features/**/screens/*.dart` - Pantallas UI
+- ✅ `lib/features/**/widgets/*.dart` - Componentes UI
+- ✅ `lib/shared/widgets/*.dart` - Biblioteca de componentes
+- ✅ `lib/core/theme/*.dart` - Colores, estilos, tipografía
+- ✅ `lib/l10n/*.arb` - Strings i18n (con aprobación)
+
+### 2. **NO tocar sin permiso explícito** ❌
+**PROHIBIDO modificar sin pedir:**
+- ❌ `pubspec.yaml` - Dependencias
+- ❌ `android/app/build.gradle.kts` - Configuración Android
+- ❌ `android/app/src/main/AndroidManifest.xml` - Manifest
+- ❌ `lib/core/routes/app_router.dart` - Routing (causan pantallas negras)
+- ❌ Cualquier archivo de configuración build
+
+### 3. **Proceso de Validación** 🔍
+**ANTES de aplicar cambios:**
+1. Presentar resumen:
+   - Archivos a modificar
+   - Posible impacto
+   - Alternativas consideradas
+2. Esperar aprobación del usuario
+3. Aplicar cambios
+4. Esperar feedback visual del usuario
+
+### 4. **Manejo de Errores** 🐛
+**Si el usuario reporta error:**
+1. ❌ NO adivinar la solución
+2. ✅ Pedir logs completos
+3. ✅ Analizar stack trace
+4. ✅ Proponer solución con rollback plan
+
+---
+
+## 🚀 WORKFLOW DE DESARROLLO ÁGIL
+
+### Ciclo de 3 Pasos:
+
+**1. Prompt Visual del Usuario:**
+- Usuario describe cambio deseado
+- Agente presenta plan de modificación
+- Usuario aprueba
+
+**2. Aplicar Cambios:**
+- Modificar SOLO archivos de UI
+- NO tocar configs ni routing
+- Commit incremental
+
+**3. Hot Reload:**
+- Usuario ejecuta: `r` en terminal Flutter
+- Usuario valida visualmente
+- Usuario reporta resultado
+
+---
+
+## 📊 FORMATO DE SALIDA
+
+**Antes de cada cambio, presentar:**
+
+```markdown
+## 📝 Propuesta de Cambio
+
+**Archivos a modificar:**
+- lib/features/auth/presentation/screens/login_screen.dart
+
+**Cambios:**
+- Agregar botón de Google Sign In
+- Usar AuthButton component existente
+
+**Impacto:**
+- ✅ Sin cambios en routing
+- ✅ Sin nuevas dependencias
+- ⚠️ Necesita agregar string i18n "loginGoogleButton"
+
+**Rollback:**
+- git restore lib/features/auth/presentation/screens/login_screen.dart
+
+**¿Aprobar?**
+```
+
+---
+
+## 🎯 ESTRATEGIAS ESPECÍFICAS
+
+### Para Flutter:
+
+**✅ HACER:**
+- Usar hot reload (`r`) en lugar de recompilar
+- Modificar widgets y UI incrementalmente
+- Reutilizar componentes de `lib/shared/widgets/`
+- Mantener i18n actualizado
+
+**❌ NO HACER:**
+- Modificar GoRouter sin validación visual
+- Agregar dependencias sin permiso
+- Tocar ShellRoute o estructura de navegación
+- Asumir que hot reload funcionó
+
+### Para i18n:
+
+**✅ HACER:**
+- Agregar strings a `app_es.arb` Y `app_en.arb` simultáneamente
+- Usar keys descriptivas: `loginGoogleButton` no `button1`
+- Mantener consistencia ES/EN
+
+**❌ NO HACER:**
+- Dejar strings hardcoded
+- Agregar solo a un archivo ARB
+- Cambiar keys existentes (rompe UI)
+
+---
+
+## 🔄 COMMITS Y BRANCHES
+
+### Estrategia de Commits:
+
+**✅ Commits pequeños e incrementales:**
+```bash
+git add lib/features/auth/presentation/screens/login_screen.dart
+git commit -m "feat: Add Google sign-in button with i18n"
+```
+
+**❌ Commits grandes que mezclan concerns:**
+```bash
+git add .
+git commit -m "varios cambios"
+```
+
+### Mensajes de Commit:
+
+Usar formato:
+- `feat:` - Nueva funcionalidad
+- `fix:` - Arreglo de bug
+- `refactor:` - Refactorización
+- `style:` - Cambios de estilo UI
+- `i18n:` - Cambios de internacionalización
+
+---
+
+## 🚨 BLOQUEADORES CONOCIDOS
+
+### 1. **Pantalla Negra al Navegar**
+**Causa:** Rutas fuera de ShellRoute  
+**Solución:** NO modificar `app_router.dart` sin validación visual  
+**Workaround:** Documentar y dejar para sesión con usuario presente
+
+### 2. **Hot Reload Falla**
+**Síntoma:** Cambios no se reflejan  
+**Solución:** Hot restart (`R`) o recompilar  
+**Prevención:** Cambios pequeños e incrementales
+
+### 3. **Duplicate GlobalKey**
+**Causa:** Widgets con keys duplicadas  
+**Solución:** Revertir cambios, revisar keys  
+**Prevención:** NO modificar AuthInputField sin testing
+
+---
+
+## 📱 PLATAFORMAS DE TESTING
+
+### Prioridad de Testing:
+
+1. **Android Emulator** (RECOMENDADO)
+   - Hot reload confiable
+   - UI idéntica a producción
+   - ~20s primera compilación, ~1-2s hot reload
+
+2. **Chrome** (Solo web testing)
+   - Más lento (~40s compilación)
+   - Hot reload a veces falla
+   - Usar solo para features web-specific
+
+3. **Windows Desktop** (Requiere setup)
+   - Necesita Visual Studio C++ tools
+   - NO disponible actualmente
+
+---
+
+## ✅ CHECKLIST PRE-MODIFICACIÓN
+
+Antes de modificar CUALQUIER archivo:
+
+- [ ] ¿Es un archivo de UI/widgets permitido?
+- [ ] ¿He presentado el plan al usuario?
+- [ ] ¿Tengo plan de rollback?
+- [ ] ¿Los cambios son incrementales y pequeños?
+- [ ] ¿NO toco routing ni configs?
+- [ ] ¿Puedo revertir fácilmente si falla?
+
+---
+
+## 🎓 LECCIONES APRENDIDAS
+
+### Sesión 2026-01-31:
+
+**❌ ERROR:** Modificar AuthInputField causó Duplicate GlobalKey
+- **Aprendido:** NO modificar widgets core sin testing exhaustivo
+- **Solución:** Revertir cambios, mantener código estable
+
+**❌ ERROR:** Mover component-library en routing causó pantalla negra
+- **Aprendido:** Routing requiere validación visual obligatoria
+- **Solución:** NO tocar app_router.dart sin usuario presente
+
+**✅ ÉXITO:** Strings i18n hardcoded → AppLocalizations
+- **Método:** Cambios pequeños, directos, sin tocar componentes
+- **Resultado:** i18n 100% funcional, código estable
+
+---
+
+## 💡 MEJORES PRÁCTICAS
+
+### Para Desarrollo Sin Feedback Visual:
+
+1. **Cambios ultra-pequeños** - 1 archivo a la vez cuando sea posible
+2. **Código conservador** - Preferir soluciones simples sobre "elegantes"
+3. **Testing incremental** - Usuario valida cada cambio antes del siguiente
+4. **Rollback fácil** - Commits frecuentes, cambios revertibles
+5. **Comunicación clara** - Explicar QUÉ cambiaré y POR QUÉ
+
+---
+
+**Última actualización:** 2026-01-31 20:12  
+**Versión:** 1.0  
+**Mantenido por:** @antigravity AI agent

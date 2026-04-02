@@ -1,0 +1,11 @@
+# AI Ignore Rules
+# Este archivo indica a los asistentes de IA qué archivos deben ignorar
+
+# Ignorar archivos Word y PDF en la carpeta de documentación
+# Solo usar archivos .md para análisis y referencia
+documentacion/*.docx
+documentacion/*.pdf
+documentacion/*.doc
+
+# Nota: Los archivos .md en documentacion/ son la fuente de verdad
+# Los archivos Word y PDF son respaldos originales que no deben analizarse

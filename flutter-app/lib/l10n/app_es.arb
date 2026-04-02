@@ -1,0 +1,943 @@
+{
+  "@@locale": "es",
+  "appTitle": "BGnius VITA",
+  "@appTitle": {
+    "description": "Nombre de la aplicación"
+  },
+  "loginTitle": "Bienvenido",
+  "@loginTitle": {
+    "description": "Título de la pantalla de login"
+  },
+  "loginEmailHint": "Correo",
+  "@loginEmailHint": {
+    "description": "Placeholder del campo de correo electrónico"
+  },
+  "loginPasswordHint": "Contraseña",
+  "@loginPasswordHint": {
+    "description": "Placeholder del campo de contraseña"
+  },
+  "loginShowPassword": "Mostrar",
+  "@loginShowPassword": {
+    "description": "Texto del botón para mostrar contraseña"
+  },
+  "loginHidePassword": "Ocultar",
+  "@loginHidePassword": {
+    "description": "Texto del botón para ocultar contraseña"
+  },
+  "loginRememberMe": "Recuérdame",
+  "@loginRememberMe": {
+    "description": "Texto del checkbox recordar sesión"
+  },
+  "loginForgotPassword": "Olvide mi contraseña",
+  "@loginForgotPassword": {
+    "description": "Texto del enlace de recuperación de contraseña"
+  },
+  "loginButton": "Ingresar",
+  "@loginButton": {
+    "description": "Texto del botón de login"
+  },
+  "loginCreateAccount": "Crear Usuario",
+  "@loginCreateAccount": {
+    "description": "Texto del botón de registro"
+  },
+  "loginLibraryLink": "Biblioteca",
+  "@loginLibraryLink": {
+    "description": "Enlace a biblioteca de componentes (dev)"
+  },
+  "loginSuccess": "Bienvenido a BGnius VITA",
+  "@loginSuccess": {
+    "description": "Mensaje de éxito al hacer login"
+  },
+  "loginInvalidCredentials": "Correo o contraseña incorrectos",
+  "@loginInvalidCredentials": {
+    "description": "Mensaje de error cuando las credenciales son inválidas"
+  },
+  "validationRequiredField": "Este campo es obligatorio",
+  "@validationRequiredField": {
+    "description": "Mensaje cuando un campo requerido está vacío"
+  },
+  "validationInvalidEmail": "El formato del correo no es válido",
+  "@validationInvalidEmail": {
+    "description": "Mensaje cuando el formato del email es inválido"
+  },
+  "validationPasswordRequired": "La contraseña es obligatoria",
+  "@validationPasswordRequired": {
+    "description": "Mensaje cuando el campo contraseña está vacío"
+  },
+  "generalError": "Ocurrió un error inesperado",
+  "@generalError": {
+    "description": "Mensaje de error genérico"
+  },
+  "generalLoading": "Cargando...",
+  "@generalLoading": {
+    "description": "Texto de estado de carga"
+  },
+  "validationEmailRequired": "El correo es obligatorio",
+  "@validationEmailRequired": {
+    "description": "Mensaje cuando el campo de correo está vacío"
+  },
+  "validationPasswordMinLength": "La contraseña debe tener al menos 8 caracteres",
+  "@validationPasswordMinLength": {
+    "description": "Mensaje cuando la contraseña es muy corta"
+  },
+  "validationPasswordUppercase": "Debe contener al menos una mayúscula",
+  "@validationPasswordUppercase": {
+    "description": "Mensaje cuando falta mayúscula en contraseña"
+  },
+  "validationPasswordLowercase": "Debe contener al menos una minúscula",
+  "@validationPasswordLowercase": {
+    "description": "Mensaje cuando falta minúscula en contraseña"
+  },
+  "validationPasswordNumber": "Debe contener al menos un número",
+  "@validationPasswordNumber": {
+    "description": "Mensaje cuando falta número en contraseña"
+  },
+  "validationPasswordSymbol": "Debe contener al menos un símbolo especial",
+  "@validationPasswordSymbol": {
+    "description": "Mensaje cuando falta símbolo en contraseña"
+  },
+  "validationPasswordsNoMatch": "Las contraseñas no coinciden",
+  "@validationPasswordsNoMatch": {
+    "description": "Mensaje cuando las contraseñas no son iguales"
+  },
+  "validationConfirmPassword": "Confirma tu contraseña",
+  "@validationConfirmPassword": {
+    "description": "Mensaje cuando falta confirmar contraseña"
+  },
+  "registerTitle": "Crear Usuario",
+  "registerNameLabel": "Nombre",
+  "registerNameHint": "Nombre completo",
+  "registerEmailLabel": "Correo",
+  "registerEmailHint": "tu@correo.com",
+  "registerAddressLabel": "Dirección",
+  "registerAddressHint": "Calle 123 #45-67",
+  "registerCountryLabel": "País",
+  "registerCountryHint": "Seleccionar país",
+  "registerLanguageLabel": "Idioma",
+  "registerLanguageHint": "Seleccionar idioma",
+  "registerPasswordLabel": "Contraseña",
+  "registerPasswordHint": "Mínimo 8 caracteres",
+  "registerConfirmPasswordLabel": "Repetir Contraseña",
+  "registerConfirmPasswordHint": "Confirma tu contraseña",
+  "registerPhonePrefixLabel": "Prefijo",
+  "registerPhoneLabel": "Teléfono",
+  "registerPhoneHint": "3001234567",
+  "registerAcceptTerms": "Acepto términos y condiciones",
+  "registerButton": "Vincular Usuario",
+  "registerAlreadyHaveAccount": "¿Ya tienes cuenta? ",
+  "registerLoginLink": "Inicia Sesión",
+  "registerErrorTerms": "Debes aceptar los términos y condiciones",
+  "registerErrorPasswordMismatch": "Las contraseñas no coinciden",
+  "registerSuccess": "Cuenta creada exitosamente",
+  "registerError": "Error al crear la cuenta",
+  "forgotPasswordTitle": "Restablecer Contraseña",
+  "forgotPasswordEmailHint": "Correo/Usuario",
+  "forgotPasswordGetCodeButton": "Obtener código temporal",
+  "forgotPasswordTimeRemaining": "Tiempo restante",
+  "forgotPasswordTimeRemainingOf": "de contraseña temporal",
+  "forgotPasswordNewPasswordHint": "Nueva Contraseña",
+  "forgotPasswordRepeatPasswordHint": "Repita su Nueva Contraseña",
+  "forgotPasswordCodeHint": "Ingrese el código temporal",
+  "forgotPasswordResetButton": "Restablecer Contraseña",
+  "forgotPasswordErrorEmail": "Ingresa tu correo electrónico",
+  "forgotPasswordCodeSent": "Código enviado a {email}",
+  "@forgotPasswordCodeSent": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "forgotPasswordErrorPasswordMismatch": "Las contraseñas no coinciden",
+  "forgotPasswordSuccess": "Contraseña restablecida exitosamente",
+  "eventLogTitle": "Registro de Eventos",
+  "eventLogDownload": "Descargar registros",
+  "eventLogDownloading": "Descargando {count} registros...",
+  "@eventLogDownloading": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "eventLogEmpty": "No hay eventos registrados",
+  "deviceInfoTitle": "Información del dispositivo",
+  "deviceInfoSerialLabel": "No. Serie:",
+  "deviceInfoNameLabel": "Nombre:",
+  "deviceInfoVersionLabel": "Versión Actual:",
+  "deviceInfoTotalCyclesLabel": "Ciclos Totales:",
+  "deviceInfoActivationDateLabel": "Fecha de activación",
+  "deviceInfoStatusLabel": "Estado",
+  "deviceInfoUpdateBtn": "Actualizar dispositivo",
+  "deviceInfoOneMaintenance": "1 mantenimiento",
+  "deviceInfoGroupLabel": "Grupo:",
+  "deviceInfoFavoriteLabel": "Favorito:",
+  "deviceInfoTechnicianLabel": "Técnico Asignado:",
+  "deviceInfoPhotoLabel": "Foto:",
+  "deviceInfoYes": "Sí",
+  "deviceInfoNo": "No",
+  "deviceInfoCustomPhoto": "Personalizada",
+  "deviceInfoDefaultPhoto": "Por defecto",
+  "deviceAllDetailsTitle": "Todos los detalles",
+  "deviceInfoSectionGeneral": "General",
+  "deviceInfoSectionConfig": "Configuración VITA",
+  "deviceInfoSectionOther": "Otros",
+  "deviceInfoSectionIdentity": "Identificación",
+  "deviceInfoSectionOperational": "Configuración Operativa",
+  "deviceInfoSectionPhysical": "Información Física",
+  "deviceInfoSectionMaintenance": "Mantenimiento",
+  "deviceInfoModelLabel": "Modelo:",
+  "deviceInfoDescriptionLabel": "Descripción:",
+  "deviceInfoMacLabel": "Dirección MAC:",
+  "deviceInfoHwVersionLabel": "Versión Hardware:",
+  "deviceInfoFwVersionLabel": "Versión Firmware:",
+  "deviceInfoAutoCloseLabel": "Auto-cierre:",
+  "deviceInfoMaxOpenTimeLabel": "Tiempo máx. abierto:",
+  "deviceInfoPedestrianTimeoutLabel": "Timeout peatonal:",
+  "deviceInfoEmergencyModeLabel": "Modo Emergencia:",
+  "deviceInfoAutoLampLabel": "Lámpara Auto-On:",
+  "deviceInfoMaintenanceModeLabel": "Modo Mantenimiento:",
+  "deviceInfoLockedLabel": "Bloqueado:",
+  "deviceInfoInstallationDateLabel": "Fecha Instalación:",
+  "deviceInfoWarrantyDateLabel": "Vencimiento Garantía:",
+  "deviceInfoScheduledMaintLabel": "Mantenimiento Programado:",
+  "deviceInfoMaintNotesLabel": "Notas Mantenimiento:",
+  "deviceInfoPowerTypeLabel": "Tipo Corriente:",
+  "deviceInfoMotorTypeLabel": "Tipo Motor:",
+  "deviceInfoOpeningPhotocellLabel": "Fotocélula Apertura:",
+  "deviceInfoClosingPhotocellLabel": "Fotocélula Cierre:",
+  "deviceInfoSecondsSuffix": " seg",
+  "deviceInfoViewAllDetailsBtn": "Ver todos los detalles",
+  "deviceAddTitle": "Agregar Dispositivo",
+  "deviceScanBtn": "Escanear QR / Wifi",
+  "deviceFormNameLabel": "Nombre *",
+  "deviceFormLocationLabel": "Ubicación *",
+  "deviceFormSerialLabel": "Número de Serie *",
+  "deviceFormMacLabel": "Dirección MAC *",
+  "deviceFormProgressTitle": "Progreso del Formulario",
+  "deviceFormProgressCount": "{completed} de 7 secciones",
+  "@deviceFormProgressCount": {
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      }
+    }
+  },
+  "deviceFormSectionBasic": "Información Básica",
+  "deviceFormSectionId": "Identificación",
+  "deviceFormSectionConfig": "Configuración Operativa",
+  "deviceFormSectionPhysical": "Información Física",
+  "deviceFormSectionMaintenance": "Mantenimiento",
+  "deviceFormSectionVita": "Configuración VITA",
+  "deviceFormNamePlaceholder": "Nombre del dispositivo",
+  "deviceFormLocationPlaceholder": "Selecciona ubicación",
+  "deviceFormDescriptionLabel": "Descripción",
+  "deviceFormDescriptionPlaceholder": "Descripción (opcional)",
+  "deviceFormModelLabel": "Modelo *",
+  "deviceFormModelPlaceholder": "Selecciona modelo",
+  "deviceFormSubmitCreate": "Crear Dispositivo",
+  "deviceFormSubmitUpdate": "Guardar Cambios",
+  "deviceFormCancel": "Cancelar",
+  "deviceFormErrorRequired": "Por favor completa todos los campos obligatorios",
+  "deviceFormErrorLocation": "Selecciona una ubicación",
+  "deviceFormErrorModel": "Selecciona un modelo",
+  "deviceFormErrorSave": "Error al guardar: {error}",
+  "deviceFormStatusLabel": "Estado",
+  "deviceFormStatusPlaceholder": "Selecciona estado",
+  "deviceFormTypeLabel": "Tipo de Dispositivo",
+  "deviceFormTypePlaceholder": "Selecciona tipo",
+  "deviceFormPhotoLabel": "Foto del dispositivo",
+  "deviceFormPhotoHint": "Toca para añadir una foto",
+  "deviceInfoSignalStrength": "{percentage}% señal",
+  "@deviceInfoSignalStrength": {
+    "placeholders": {
+      "percentage": {
+        "type": "int"
+      }
+    }
+  },
+  "deviceInfoSecondsValue": "{seconds} seg",
+  "groupsStatusReady": "Listo",
+  "groupsErrorSelectGroupFirst": "Selecciona un grupo primero",
+  "groupsErrorTodosReadonly": "No se pueden agregar dispositivos manualmente al grupo TODOS",
+  "groupsErrorSelectDeviceAdd": "Selecciona un dispositivo para agregar",
+  "groupsErrorDeviceAlreadyInGroup": "El dispositivo ya está en este grupo",
+  "groupsSuccessDeviceAdded": "Dispositivo \"{deviceName}\" añadido a {groupName}",
+  "@groupsSuccessDeviceAdded": {
+    "placeholders": {
+      "deviceName": {
+        "type": "String"
+      },
+      "groupName": {
+        "type": "String"
+      }
+    }
+  },
+  "groupsTitle": "Gestión de Grupos",
+  "groupsSubtitleDevicesInGroup": "Dispositivos en este grupo",
+  "groupsControlPrefix": "Control: {deviceName}",
+  "@groupsControlPrefix": {
+    "placeholders": {
+      "deviceName": {
+        "type": "String"
+      }
+    }
+  },
+  "groupsButtonMoreDetails": "Más detalles y configuración",
+  "groupsSubtitleAddMore": "Agregar más dispositivos",
+  "groupsDropdownHint": "Selecciona para agregar...",
+  "groupsDropdownEmpty": "No hay dispositivos disponibles",
+  "groupsButtonAdd": "Agregar a este grupo",
+  "groupsInfoTodosTitle": "Grupo Automático \"TODOS\"",
+  "groupsInfoTodosBody": "Este grupo incluye automáticamente todos tus dispositivos. No puedes agregar ni quitar dispositivos manualmente aquí.",
+  "groupsEmptyList": "No hay dispositivos en este grupo",
+  "groupCreateTitle": "Crear Nuevo Grupo",
+  "groupEditTitle": "Editar Grupo",
+  "groupNameLabel": "Nombre del Grupo",
+  "groupDescLabel": "Descripción (Opcional)",
+  "groupDeleteConfirmTitle": "¿Eliminar Grupo?",
+  "groupDeleteConfirmBody": "Esta acción no se puede deshacer.",
+  "deviceRemoveConfirmTitle": "¿Quitar Dispositivo?",
+  "deviceRemoveConfirmBody": "¿Estás seguro de que deseas quitar este dispositivo del grupo?",
+  "groupsBtnCancel": "Cancelar",
+  "groupsBtnCreate": "Crear",
+  "groupsBtnSave": "Guardar",
+  "groupsBtnRemove": "Quitar",
+  "groupsBtnDelete": "Eliminar",
+  "groupsTitleSimple": "Grupos",
+  "groupsButtonCreateAction": "Crear Grupo",
+  "groupsSubsectionDevices": "Dispositivos",
+  "groupsSuccessCreated": "Grupo creado exitosamente",
+  "groupsSuccessUpdated": "Grupo actualizado",
+  "groupsSuccessDeleted": "Grupo eliminado",
+  "groupsSuccessDeviceRemoved": "Dispositivo quitado del grupo",
+  "generalRetry": "Reintentar",
+  "provisioningScanTitle": "Buscando Dispositivos",
+  "provisioningScanSubtitle": "Asegúrate que tu dispositivo esté en modo configuración (LED parpadeando).",
+  "provisioningScanningText": "Escaneando...",
+  "provisioningDeviceFound": "Dispositivo detectado",
+  "provisioningConnectBtn": "Conectar",
+  "provisioningWifiTitle": "Conectar a Wifi",
+  "provisioningWifiSubtitle": "Ingresa las credenciales para el dispositivo.",
+  "provisioningSsidLabel": "Nombre de la Red (SSID)",
+  "provisioningPasswordLabel": "Contraseña Wifi",
+  "provisioningSendBtn": "Enviar Configuración",
+  "provisioningSuccessTitle": "¡Configuración Exitosa!",
+  "provisioningSuccessBody": "El dispositivo se ha conectado correctamente.",
+  "provisioningManualModeBtn": "¿No aparece? Configuración Manual (AP)",
+  "provisioningErrorConnection": "No se pudo conectar al dispositivo",
+  "provisioningErrorWifi": "Contraseña incorrecta o Wifi no encontrado",
+  "devicesListTitle": "Dispositivos",
+  "devicesTabDevices": "Dispositivos",
+  "devicesTabOthers": "Otros",
+  "deviceStatusOpening": "Abriendo...",
+  "deviceStatusClosing": "Cerrando...",
+  "deviceStatusPaused": "Pausado",
+  "deviceStatusPedestrianActive": "Modo Peatonal activado",
+  "deviceStatusReady": "Listo",
+  "deviceAutoCloseCountdown": "Cierre automático en: {seconds} s",
+  "@deviceAutoCloseCountdown": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "emptyListMessage": "No hay elementos",
+  "scanDevicesTitle": "Agregar Dispositivo",
+  "scanDeviceLabel": "Dispositivo:",
+  "scanDeviceState": "Estado:",
+  "scanDeviceDetail": "Detalle:",
+  "scanButtonScan": "Escanear",
+  "scanWifiNetworksDetected": "Redes Wi-Fi Detectadas",
+  "scanVitaDevicesAvailable": "VITA'S disponibles",
+  "scanVitaDevices": "Dispositivos VITA",
+  "scanSerialNumberHint": "Vincular por No de Serie",
+  "scanSerialNumberLabel": "Número de Serie",
+  "scanButtonAdd": "Agregar",
+  "scanCompletedMessage": "Escaneo completado - {count} redes encontradas",
+  "@scanCompletedMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "scanSelectDeviceError": "Selecciona un dispositivo VITA o ingresa un número de serie",
+  "scanDeviceAddedSuccess": "Dispositivo {deviceId} agregado",
+  "@scanDeviceAddedSuccess": {
+    "placeholders": {
+      "deviceId": {
+        "type": "String"
+      }
+    }
+  },
+  "parametersTitle": "Parámetros\ndel Dispositivo",
+  "parametersDeviceLabel": "Dispositivo:",
+  "parametersModelLabel": "Mod:",
+  "parametersSerialLabel": "No. Serie:",
+  "parametersStateLabel": "Estado:",
+  "parametersDetailLabel": "Detalle:",
+  "parametersConfigSection": "Config Parámetros:",
+  "parametersNotificationsSection": "Config Notificaciones:",
+  "parametersAutoClose": "Cierre Automático",
+  "parametersCourtesyLight": "Luz de cortesía",
+  "parametersAutoCloseTime": "Tiempo antes de cerrar automáticamente",
+  "parametersLockDevice": "Bloquear dispositivo",
+  "parametersKeepOpen": "Mantener abierto",
+  "parametersDisconnectionReminder": "Recordatorio falta de conexión",
+  "parametersOpenDoorReminder": "Recordatorio puerta abierta",
+  "parametersForcedOpeningAlarm": "Alarma Apertura Forzada",
+  "parametersPhotocellBlocked": "Foto celda bloqueada",
+  "parametersOpeningNotAllowed": "Apertura no permitida",
+  "parametersUpdateAvailable": "Actualización disponible",
+  "parametersMaintenanceRequest": "Solicitud de mantenimiento",
+  "parametersOpenDoorReminderTime": "Tiempo recordatorio puerta abierta",
+  "parametersConnectionFailureTime": "Tiempo falta de conexión",
+  "parametersPhotocellBlockedTime": "Tiempo foto celda bloqueada",
+  "parametersUpdateButton": "Actualizar parámetros",
+  "parametersUpdatedSuccess": "Parámetros actualizados correctamente",
+  "settingsTitle": "Configuración",
+  "settingsSelectCountry": "Seleccionar País",
+  "settingsSelectLanguage": "Seleccionar Idioma",
+  "settingsSelectEnvironment": "Seleccionar Entorno",
+  "settingsCountryCostaRica": "Costa Rica",
+  "settingsCountryMexico": "México",
+  "settingsCountrySpain": "España",
+  "settingsLanguageSpanish": "Español",
+  "settingsLanguageEnglish": "English",
+  "settingsEnvironmentProduction": "Producción",
+  "settingsEnvironmentStaging": "Staging",
+  "settingsEnvironmentDevelopment": "Desarrollo",
+  "settingsProfileSection": "Perfil de Usuario",
+  "settingsAppearanceSection": "Apariencia",
+  "settingsAccessibilitySection": "Accesibilidad",
+  "settingsSecuritySection": "Seguridad",
+  "settingsServerSection": "Configuración de Servidor",
+  "settingsInfoSection": "Información",
+  "settingsFieldName": "Nombre",
+  "settingsFieldPhone": "Teléfono",
+  "settingsFieldEmail": "Correo",
+  "settingsFieldAddress": "Dirección",
+  "settingsFieldCountry": "País",
+  "settingsFieldLanguage": "Idioma",
+  "settingsDarkMode": "Modo Oscuro",
+  "settingsFontSize": "Tamaño de Fuente",
+  "settingsHighContrast": "Alto Contraste",
+  "settingsReduceMotion": "Reducir Movimiento",
+  "settingsCurrentPassword": "Contraseña Actual",
+  "settingsNewPassword": "Contraseña Nueva",
+  "settingsRepeatPassword": "Repetir Contraseña",
+  "settingsBiometrics": "Habilitar Biometría",
+  "settingsBiometricsSubtitle": "Usar huella o rostro para ingresar",
+  "settingsEnvironment": "Entorno",
+  "settingsServerUrl": "URL del Servidor",
+  "settingsAppVersion": "Versión de la App",
+  "settingsTermsConditions": "Términos y Condiciones",
+  "settingsPrivacyPolicy": "Política de Privacidad",
+  "settingsSaveChanges": "Guardar Cambios",
+  "settingsChangeButton": "Cambiar",
+  "settingsChangePhoto": "Cambiar foto",
+  "settingsPhotoCamera": "Cámara",
+  "settingsPhotoGallery": "Galería",
+  "settingsPhotoRemove": "Eliminar foto",
+  "settingsPhotoUpdated": "Foto de perfil actualizada",
+  "settingsPhotoRemoved": "Foto de perfil eliminada",
+  "settingsUpdatedSuccess": "Configuración actualizada exitosamente",
+  "bottomNavDevices": "Dispositivos",
+  "msgInvalidCredentials": "Correo o contraseña incorrectos",
+  "msgSessionExpired": "Tu sesión ha expirado",
+  "msgEmailAlreadyExists": "Este correo ya está registrado",
+  "msgPasswordMismatch": "Las contraseñas no coinciden",
+  "msgLoginSuccess": "Bienvenido a BGnius VITA",
+  "msgRegisterSuccess": "Cuenta creada exitosamente",
+  "msgLogoutSuccess": "Sesión cerrada",
+  "msgPasswordResetSent": "Se ha enviado un enlace a tu correo",
+  "msgDeviceNotFound": "El dispositivo no fue encontrado",
+  "msgDeviceOffline": "El dispositivo está sin conexión",
+  "msgCommandFailed": "No se pudo ejecutar el comando",
+  "msgDeviceAdded": "Dispositivo agregado exitosamente",
+  "msgDeviceUpdated": "Dispositivo actualizado",
+  "msgDeviceDeleted": "Dispositivo eliminado",
+  "msgCommandSuccess": "Comando ejecutado correctamente",
+  "msgUserNotFound": "Usuario no encontrado",
+  "msgUserAdded": "Usuario agregado exitosamente",
+  "msgUserUpdated": "Usuario actualizado",
+  "msgUserDeleted": "Usuario eliminado",
+  "msgPermissionGranted": "Permiso otorgado",
+  "msgPermissionRevoked": "Permiso revocado",
+  "msgUserLinked": "Usuario vinculado correctamente",
+  "msgGroupCreated": "Grupo creado exitosamente",
+  "msgGroupUpdated": "Grupo actualizado",
+  "msgGroupDeleted": "Grupo eliminado",
+  "msgDeviceAddedToGroup": "Dispositivo agregado al grupo",
+  "msgDeviceRemovedFromGroup": "Dispositivo removido del grupo",
+  "msgRequiredField": "Este campo es obligatorio",
+  "msgInvalidFormat": "El formato ingresado no es válido",
+  "msgServerError": "Ocurrió un error en el servidor",
+  "msgConnectionError": "No se pudo conectar al servidor",
+  "msgUnknownError": "Ocurrió un error inesperado",
+  "msgNoData": "No hay datos disponibles",
+  "msgLoading": "Cargando...",
+  "msgRetry": "Reintentar",
+  "msgCancel": "Cancelar",
+  "msgAccept": "Aceptar",
+  "msgSave": "Guardar",
+  "msgDelete": "Eliminar",
+  "msgEdit": "Editar",
+  "msgAdd": "Agregar",
+  "msgConfirm": "Confirmar",
+  "msgYes": "Sí",
+  "msgNo": "No",
+  "msgConfirmDelete": "¿Estás seguro de eliminar este elemento?",
+  "msgConfirmDeleteDevice": "¿Deseas eliminar este dispositivo?",
+  "msgConfirmDeleteUser": "¿Deseas eliminar este usuario?",
+  "msgConfirmLogout": "¿Deseas cerrar sesión?",
+  "msgCannotUndo": "Esta acción no se puede deshacer",
+  "msgMinPasswordLength": "La contraseña debe tener al menos 8 caracteres",
+  "msgInvalidEmail": "El formato del correo no es válido",
+  "msgInvalidPhone": "El formato del teléfono no es válido",
+  "msgInvalidSerialNumber": "El número de serie no es válido",
+  "navDevices": "Dispositivos",
+  "navGroups": "Grupos",
+  "navUsers": "Usuarios",
+  "navSettings": "Configuración",
+  "sharedUsersTitle": "Usuarios\nRegistrados",
+  "sharedUsersDeviceLabel": "Dispositivo:",
+  "sharedUsersModelLabel": "Mod:",
+  "sharedUsersSerialLabel": "No. Serie:",
+  "sharedUsersStatusLabel": "Estado:",
+  "sharedUsersDetailLabel": "Detalle:",
+  "sharedUsersSearchHint": "Buscar usuario",
+  "sharedUsersEmptyList": "No hay usuarios registrados",
+  "sharedUsersLinkButton": "Vincular Usuario",
+  "deviceEditTitle": "Editar Dispositivo",
+  "deviceEditSuccessMessage": "Dispositivo actualizado correctamente",
+  "deviceEditErrorLoading": "Error al cargar",
+  "deviceControlTitle": "Detalle del Dispositivo",
+  "deviceControlButtonOpen": "Abrir",
+  "deviceControlButtonPause": "Pausa",
+  "deviceControlButtonClose": "Cerrar",
+  "deviceControlButtonPedestrian": "Peatonal",
+  "deviceControlButtonLock": "Bloqueo",
+  "deviceControlButtonLight": "Lámpara",
+  "deviceControlButtonSwitch": "Switch",
+  "deviceControlStatusOpening": "Abriendo portón...",
+  "deviceControlStatusPausing": "Pausando...",
+  "deviceControlStatusClosing": "Cerrando portón...",
+  "deviceControlStatusPedestrian": "Apertura peatonal...",
+  "deviceControlStatusLocked": "Dispositivo Bloqueado",
+  "deviceControlStatusLightOn": "Luz encendida",
+  "deviceControlStatusSwitchActive": "Switch activado",
+  "deviceControlAutoCloseCountdown": "Cierre autom. en: {seconds} s",
+  "deviceControlLinkEdit": "Editar Dispositivo",
+  "deviceControlLinkUsers": "Usuarios con Acceso",
+  "deviceControlLinkParams": "Parámetros",
+  "deviceControlLinkEvents": "Registro de Eventos",
+  "deviceControlLinkContact": "Contacto Técnico",
+  "deviceControlLinkInfo": "Información del Dispositivo",
+  "technicalContactTitle": "Contacto Técnico",
+  "technicalContactDeviceLabel": "Dispositivo:",
+  "technicalContactModelLabel": "Mod:",
+  "technicalContactSerialLabel": "No. Serie:",
+  "technicalContactStatusLabel": "Estado:",
+  "technicalContactDetailLabel": "Detalle:",
+  "technicalContactTechDataTitle": "Datos del Técnico",
+  "technicalContactNameHint": "Nombre de usuario",
+  "technicalContactEmailHint": "Correo",
+  "technicalContactCountryHint": "País",
+  "technicalContactPhoneHint": "Teléfono",
+  "technicalContactAiDescription": "Nuestra IA revisa periódicamente tu automatismo, analiza su rendimiento y detecta posibles signos de desgaste o fallos. Con base en esto, te informa cuando tu sistema necesita mantenimiento.",
+  "technicalContactAiPermissionText": "Permitir que la IA me informe cuando se requiera mantenimiento.",
+  "technicalContactNotesTitle": "Notas",
+  "technicalContactDeleteButton": "Eliminar",
+  "technicalContactSaveButton": "Guardar",
+  "technicalContactDeleteDialogTitle": "Eliminar Contacto",
+  "technicalContactDeleteDialogContent": "¿Estás seguro que deseas eliminar este contacto técnico?",
+  "technicalContactCancelButton": "Cancelar",
+  "technicalContactSaveSuccess": "Contacto técnico guardado exitosamente",
+  "technicalContactDeleteSuccess": "Contacto técnico eliminado",
+  "technicalContactMaintenanceInfo": "Contactando mantenimiento - Próximamente",
+  "linkVirtualUserTitle": "Vincular usuario virtual",
+  "linkVirtualUserEmailLabel": "Correo/Usuario",
+  "linkVirtualUserEmailHint": "Correo/Usuario",
+  "linkVirtualUserLabelLabel": "Etiqueta",
+  "linkVirtualUserLabelHint": "Etiqueta",
+  "linkVirtualUserAddButton": "Agregar Usuario al Listado",
+  "linkVirtualUserNewUserName": "Nuevo Usuario",
+  "linkVirtualUserErrorEmail": "Por favor ingrese correo o usuario",
+  "linkVirtualUserSuccess": "Usuario agregado. Configura sus permisos.",
+  "deviceControlSimpleTitle": "Controles",
+  "deviceControlLocationTitle": "Ubicación",
+  "deviceControlDescriptionTitle": "Descripción",
+  "deviceControlStatusTitle": "Estado",
+  "usersScreenTitle": "Usuarios con Accesos",
+  "usersScreenDeviceLabel": "Dispositivo:",
+  "usersScreenModelLabel": "Mod:",
+  "usersScreenSerialLabel": "No. Serie:",
+  "usersScreenStatusLabel": "Estado:",
+  "usersScreenDetailLabel": "Detalle:",
+  "usersScreenAvailableUsersTitle": "Usuarios Disponibles:",
+  "usersScreenLinkButton": "Vincular Usuario Existente",
+  "usersScreenErrorSelectUsers": "Selecciona al menos un usuario",
+  "usersScreenSuccessLinked": "{count} usuario(s) vinculado(s) exitosamente",
+  "usersScreenEditInfo": "Editar {name} - Próximamente",
+  "userAccessScreenTitle": "Usuarios con Accesos",
+  "userAccessDeviceLabel": "Dispositivo:",
+  "userAccessModelLabel": "Mod:",
+  "userAccessSerialLabel": "No. Serie:",
+  "userAccessStatusLabel": "Estado:",
+  "userAccessDetailLabel": "Detalle:",
+  "userAccessLinkedUsersTitle": "Usuarios Actualmente Vinculados",
+  "userAccessLinkedUsersDesc": "Estos usuarios ya pueden acceder a este dispositivo",
+  "userAccessAvailableUsersTitle": "Usuarios Disponibles para Vincular",
+  "userAccessAvailableUsersDesc": "Selecciona usuarios para darles acceso a este dispositivo",
+  "userAccessSearchHint": "Buscar usuario...",
+  "userAccessTooltipAdmin": "Administrador",
+  "userAccessTooltipUnlink": "Desvincular",
+  "userAccessEditButton": "Editar",
+  "userAccessErrorAdminUnlink": "No puedes desvincular al administrador",
+  "userAccessErrorSelectUsers": "Selecciona al menos un usuario",
+  "userAccessUnlinkDialogTitle": "Desvincular Usuario",
+  "userAccessUnlinkDialogContent": "¿Deseas desvincular a {name}?",
+  "userAccessCancelButton": "Cancelar",
+  "userAccessUnlinkButton": "Desvincular",
+  "userAccessSuccessUnlinked": "{name} desvinculado",
+  "userAccessSuccessLinked": "{count} usuario(s) vinculado(s) exitosamente",
+  "userAccessEditInfo": "Editar {name} - Próximamente",
+  "userAccessLinkButtonSingle": "Vincular Usuario Existente ({count})",
+  "userAccessLinkButtonPlural": "Vincular Usuarios Existentes ({count})",
+  "userRolesTitle": "Roles de usuario\nen dispositivo",
+  "userRolesDeviceLabel": "Dispositivo:",
+  "userRolesModelLabel": "Mod:",
+  "userRolesSerialLabel": "No. Serie:",
+  "userRolesStatusLabel": "Estado:",
+  "userRolesDetailLabel": "Detalle:",
+  "userRolesSelectedUserLabel": "Usuario Seleccionado",
+  "userRolesEmailLabel": "Correo",
+  "userRolesNewUserDefault": "Usuario Nuevo",
+  "userRolesPermissionsTitle": "Permisos y Roles",
+  "userRolesAssignButton": "Asignar Roles",
+  "userRolesPermissionOpen": "Abrir",
+  "userRolesPermissionClose": "Cerrar",
+  "userRolesPermissionPause": "Parar/Pausa",
+  "userRolesPermissionPedestrian": "Peatonal",
+  "userRolesPermissionLock": "Bloquear",
+  "userRolesPermissionLight": "Lámpara",
+  "userRolesPermissionSwitch": "Relé/Switch",
+  "userRolesPermissionControlPanel": "Panel Control",
+  "userRolesPermissionReports": "Reportes",
+  "userRolesPermissionViewContact": "Ver Contacto",
+  "userRolesPermissionViewParams": "Ver Parámetros",
+  "userRolesPermissionEditDevice": "Editar Disp.",
+  "userRolesPermissionAssignUsers": "Asignar usuarios",
+  "userRolesErrorNoPermissions": "Selecciona al menos un permiso",
+  "userRolesSuccessAssigned": "Roles asignados y usuario vinculado exitosamente",
+  "userRolesErrorUnknownDevice": "No se pudo vincular: Dispositivo desconocido",
+  "deviceFormGallery": "Galería",
+  "deviceFormCamera": "Cámara",
+  "deviceFormDeletePhoto": "Eliminar Foto",
+  "deviceFormDeleteDevice": "Eliminar Dispositivo",
+  "generalDelete": "Eliminar",
+  "deviceFormDeleteConfirmMessage": "¿Estás seguro de que deseas eliminar este dispositivo y todos sus datos asociados? Esta acción no se puede deshacer.",
+  "deviceFormSelectImage": "Seleccionar Imagen",
+  "deviceFormTakePhoto": "Tomar Foto",
+  "deviceFormImageLoadedSuccess": "Imagen cargada correctamente",
+  "deviceFormImageLoadError": "Error al cargar imagen: {error}",
+  "@deviceFormImageLoadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceFormDeletedSuccess": "Dispositivo eliminado correctamente",
+  "blePairingTitle": "Emparejamiento BLE",
+  "@blePairingTitle": {
+    "description": "Título de la pantalla de emparejamiento BLE"
+  },
+  "bleScanStepTitle": "Escanear dispositivos",
+  "bleScanStepDescription": "Busca dispositivos VITA cercanos. Asegúrate que el dispositivo esté en modo emparejamiento (LED azul parpadeando).",
+  "bleScanButtonStart": "Iniciar escaneo",
+  "bleScanningText": "Escaneando dispositivos...",
+  "bleDeviceListStepTitle": "Seleccionar dispositivo",
+  "bleDeviceListFound": "Se encontraron {count} dispositivos",
+  "@bleDeviceListFound": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bleConnectionStepTitle": "Conectando",
+  "bleConnectingText": "Conectando al dispositivo...",
+  "bleDeviceInfoTitle": "Información del dispositivo",
+  "bleConfigureButton": "Configurar",
+  "bleConfigStepTitle": "Configuración",
+  "bleConfigStepDescription": "Configura los datos iniciales de tu dispositivo VITA.",
+  "bleConfigDeviceNameLabel": "Nombre del dispositivo",
+  "bleConfigDeviceNameHint": "Ej: Portón Principal",
+  "bleConfigLocationLabel": "Ubicación",
+  "bleConfigLocationHint": "Ej: Entrada principal",
+  "bleConfigDescriptionLabel": "Descripción",
+  "bleConfigDescriptionHint": "Descripción adicional (opcional)",
+  "bleConfigDeviceTypeLabel": "Tipo de dispositivo",
+  "bleConfigTypeGate": "Portón",
+  "bleConfigTypeDoor": "Puerta",
+  "bleConfigTypeBarrier": "Barrera",
+  "bleConfigSaveButton": "Guardar configuración",
+  "bleConfigDeviceNameRequired": "El nombre del dispositivo es requerido",
+  "bleConfiguringText": "Configurando dispositivo...",
+  "bleSuccessStepTitle": "Completado",
+  "bleSuccessMessage": "¡Dispositivo emparejado exitosamente!",
+  "bleSuccessDeviceConfigured": "El dispositivo '{deviceName}' ha sido configurado correctamente.",
+  "@bleSuccessDeviceConfigured": {
+    "placeholders": {
+      "deviceName": {
+        "type": "String"
+      }
+    }
+  },
+  "bleSuccessGoToDevices": "Ir a mis dispositivos",
+  "bleInfoSerial": "N° Serie",
+  "bleInfoFirmware": "Firmware",
+  "bleInfoModel": "Modelo",
+  "bleInfoMotor": "Motor",
+  "bleErrorGeneric": "Error durante el proceso de emparejamiento",
+  "notificationsTitle": "Notificaciones",
+  "@notificationsTitle": {
+    "description": "Título de la pantalla de notificaciones"
+  },
+  "markAllAsRead": "Marcar todas como leídas",
+  "@markAllAsRead": {
+    "description": "Texto del botón para marcar todas las notificaciones como leídas"
+  },
+  "noNotifications": "No hay notificaciones",
+  "@noNotifications": {
+    "description": "Mensaje cuando no hay notificaciones"
+  },
+  "minutesAgo": "hace {minutes}m",
+  "@minutesAgo": {
+    "description": "Texto para mostrar tiempo transcurrido en minutos",
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "hoursAgo": "hace {hours}h",
+  "@hoursAgo": {
+    "description": "Texto para mostrar tiempo transcurrido en horas",
+    "placeholders": {
+      "hours": {
+        "type": "String"
+      }
+    }
+  },
+  "daysAgo": "hace {days}d",
+  "@daysAgo": {
+    "description": "Texto para mostrar tiempo transcurrido en días",
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "justNow": "Ahora",
+  "@justNow": {
+    "description": "Texto para mostrar que algo pasó hace muy poco"
+  },
+  "deviceOffline": "Dispositivo desconectado",
+  "@deviceOffline": {
+    "description": "Texto para notificación de dispositivo desconectado"
+  },
+  "deviceOnline": "Dispositivo conectado",
+  "@deviceOnline": {
+    "description": "Texto para notificación de dispositivo conectado"
+  },
+  "actionExecuted": "Acción ejecutada",
+  "@actionExecuted": {
+    "description": "Texto para notificación de acción ejecutada"
+  },
+  "statusChange": "Cambio de estado",
+  "@statusChange": {
+    "description": "Texto para notificación de cambio de estado"
+  },
+  "notificationPreferences": "Preferencias de Notificaciones",
+  "@notificationPreferences": {
+    "description": "Título de la pantalla de preferencias de notificaciones"
+  },
+  "notificationPreferencesDescription": "Configura qué notificaciones quieres recibir para cada dispositivo",
+  "@notificationPreferencesDescription": {
+    "description": "Descripción de la pantalla de preferencias de notificaciones"
+  },
+  "notificationTypes": "Tipos de notificación",
+  "@notificationTypes": {
+    "description": "Título de la sección de tipos de notificación"
+  },
+  "notifyActions": "Notificar acciones",
+  "@notifyActions": {
+    "description": "Opción para notificar cuando se ejecutan acciones"
+  },
+  "notifyActionsDescription": "Cuando alguien opera el dispositivo",
+  "@notifyActionsDescription": {
+    "description": "Descripción de la opción de notificar acciones"
+  },
+  "notifyOffline": "Notificar desconexión",
+  "@notifyOffline": {
+    "description": "Opción para notificar cuando el dispositivo se desconecta"
+  },
+  "notifyOfflineDescription": "Cuando el dispositivo se desconecta",
+  "@notifyOfflineDescription": {
+    "description": "Descripción de la opción de notificar desconexión"
+  },
+  "notifyStatusChange": "Notificar cambios de estado",
+  "@notifyStatusChange": {
+    "description": "Opción para notificar cambios de estado del motor"
+  },
+  "notifyStatusChangeDescription": "Cuando cambia el estado del motor",
+  "@notifyStatusChangeDescription": {
+    "description": "Descripción de la opción de notificar cambios de estado"
+  },
+  "retry": "Reintentar",
+  "@retry": {
+    "description": "Texto del botón para reintentar una operación"
+  },
+  "activationDateLabel": "Fecha de activación",
+  "@activationDateLabel": {
+    "description": "Label for activation date field"
+  },
+  "favoriteDeviceLabel": "Dispositivo Favorito",
+  "@favoriteDeviceLabel": {
+    "description": "Label for favorite device switch"
+  },
+  "selectDatePlaceholder": "Seleccionar fecha",
+  "@selectDatePlaceholder": {
+    "description": "Placeholder text for date selection"
+  },
+  "changePhotoButton": "Cambiar",
+  "@changePhotoButton": {
+    "description": "Text for change photo button"
+  },
+  "deleteDeviceButton": "Eliminar Dispositivo",
+  "@deleteDeviceButton": {
+    "description": "Text for delete device button"
+  },
+  "serialNumberPlaceholder": "SN...",
+  "@serialNumberPlaceholder": {
+    "description": "Placeholder for serial number input"
+  },
+  "searchPlaceholder": "Buscar...",
+  "@searchPlaceholder": {
+    "description": "Default search placeholder text"
+  },
+  "confirmDefault": "Confirmar",
+  "@confirmDefault": {
+    "description": "Default confirm button text"
+  },
+  "cancelDefault": "Cancelar",
+  "@cancelDefault": {
+    "description": "Default cancel button text"
+  },
+  "groupNotFound": "Grupo no encontrado",
+  "@groupNotFound": {
+    "description": "Error message when group is not found"
+  },
+  "cannotAddToAllGroup": "No se pueden agregar dispositivos al grupo TODOS manualmente",
+  "@cannotAddToAllGroup": {
+    "description": "Error message when trying to add devices to ALL group manually"
+  },
+  "deviceAlreadyInGroup": "El dispositivo ya está en el grupo",
+  "@deviceAlreadyInGroup": {
+    "description": "Error message when device is already in the group"
+  },
+  "cannotRemoveFromAllGroup": "No se pueden eliminar dispositivos del grupo TODOS",
+  "@cannotRemoveFromAllGroup": {
+    "description": "Error message when trying to remove devices from ALL group"
+  },
+  "deviceNotInGroup": "El dispositivo no está en el grupo",
+  "@deviceNotInGroup": {
+    "description": "Error message when device is not in the group"
+  },
+  "nameCannotBeEmpty": "El nombre no puede estar vacío",
+  "@nameCannotBeEmpty": {
+    "description": "Error message when name field is empty"
+  },
+  "groupNameAlreadyExists": "Ya existe un grupo con este nombre",
+  "@groupNameAlreadyExists": {
+    "description": "Error message when group name already exists"
+  },
+  "cannotModifyAllGroup": "No se puede modificar el grupo TODOS",
+  "@cannotModifyAllGroup": {
+    "description": "Error message when trying to modify ALL group"
+  },
+  "cannotDeleteAllGroup": "No se puede eliminar el grupo TODOS",
+  "@cannotDeleteAllGroup": {
+    "description": "Error message when trying to delete ALL group"
+  },
+  "powerTypeLabel": "Tipo Corriente",
+  "@powerTypeLabel": {
+    "description": "Label for power type field"
+  },
+  "motorTypeLabel": "Tipo Motor",
+  "@motorTypeLabel": {
+    "description": "Label for motor type field"
+  },
+  "selectPlaceholder": "Seleccionar",
+  "@selectPlaceholder": {
+    "description": "Generic select placeholder text"
+  },
+  "openingPhotocellLabel": "Fotocélula Apertura",
+  "@openingPhotocellLabel": {
+    "description": "Label for opening photocell switch"
+  },
+  "closingPhotocellLabel": "Fotocélula Cierre",
+  "@closingPhotocellLabel": {
+    "description": "Label for closing photocell switch"
+  },
+  "installationDateLabel": "Fecha de Instalación",
+  "@installationDateLabel": {
+    "description": "Label for installation date"
+  },
+  "warrantyExpirationLabel": "Vencimiento Garantía",
+  "@warrantyExpirationLabel": {
+    "description": "Label for warranty expiration date"
+  },
+  "scheduledMaintenanceLabel": "Mantenimiento Programado",
+  "@scheduledMaintenanceLabel": {
+    "description": "Label for scheduled maintenance date"
+  },
+  "technicianNamePlaceholder": "Nombre del técnico...",
+  "@technicianNamePlaceholder": {
+    "description": "Placeholder for technician name field"
+  },
+  "technicalContactLabel": "Contacto Técnico",
+  "@technicalContactLabel": {
+    "description": "Label for technical contact field"
+  },
+  "additionalNotesPlaceholder": "Notas adicionales...",
+  "@additionalNotesPlaceholder": {
+    "description": "Placeholder for additional notes field"
+  },
+  "maintenanceNotesLabel": "Notas de Mantenimiento",
+  "@maintenanceNotesLabel": {
+    "description": "Label for maintenance notes field"
+  },
+  "deviceOnlineStatus": "En línea",
+  "deviceOfflineStatus": "Sin conexión",
+  "deviceImageLabel": "Imagen del portón del dispositivo",
+  "mainGateLabel": "Portón Principal",
+  "garageGateLabel": "Portón Cochera",
+  "controlsButtonOpen": "Abrir",
+  "controlsButtonPause": "Pausa",
+  "controlsButtonClose": "Cerrar",
+  "controlsButtonPedestrian": "Peatonal",
+  "modelLabel": "Modelo:",
+  "serialNumberLabel": "No. Serie:",
+  "detailLabel": "Detalle",
+  "notificationTooltip": "Notificaciones",
+  "retryButton": "Reintentar",
+  "editButton": "Editar",
+  "showPasswordButton": "Mostrar",
+  "hidePasswordButton": "Ocultar"
+}

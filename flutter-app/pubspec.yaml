@@ -1,0 +1,78 @@
+name: bgnius_vita
+description: BGnius VITA - Control de Accesos IoT
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  
+  # State Management
+  flutter_riverpod: ^2.4.9
+  
+  # Navegación
+  go_router: ^13.0.0
+  
+  # HTTP Client
+  dio: ^5.4.0
+  
+  # Almacenamiento Local
+  shared_preferences: ^2.2.2
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  
+  # UI Components
+  google_fonts: ^6.2.1
+  flutter_svg: ^2.0.9
+  cached_network_image: ^3.3.1
+  shimmer: ^3.0.0
+  
+  # Utilidades
+  intl: ^0.20.2
+  equatable: ^2.0.5
+  dartz: ^0.10.1
+  
+  # Cupertino Icons (opcional)
+  cupertino_icons: ^1.0.6
+  image_picker: ^1.1.2
+  flutter_blue_plus: ^1.30.0
+  permission_handler: ^11.3.1
+  network_info_plus: ^5.0.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  #flutter_lints: ^4.0.0
+  hive_generator: ^2.0.1
+  build_runner: ^2.4.8
+  flutter_launcher_icons: ^0.13.1
+  mockito: ^5.4.4
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/logo_isotipo.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "assets/images/logo_isotipo.png"
+    background_color: "#hex_code"
+    theme_color: "#hex_code"
+  windows:
+    generate: true
+    image_path: "assets/images/logo_isotipo.png"
+    icon_size: 48 # min:48, max:256, default: 48
+
+
+flutter:
+  uses-material-design: true
+  generate: true  # Enable code generation for i18n
+  
+  assets:
+    - assets/images/
+    - assets/icons/

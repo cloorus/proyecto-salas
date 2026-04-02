@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      target: base
+    volumes:
+      - .:/app:rw
+    environment:
+      - DEBUG=true
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload", "--log-level", "debug"]
+    
+  postgres:
+    environment:
+      - POSTGRES_DB=vita_db_dev
+    volumes:
+      - pgdata_dev:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"
+      
+  redis:
+    ports:
+      - "6381:6379"
+    volumes:
+      - redisdata_dev:/data
+
+volumes:
+  pgdata_dev:
+  redisdata_dev:

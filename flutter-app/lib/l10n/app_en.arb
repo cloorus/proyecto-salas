@@ -1,0 +1,936 @@
+{
+  "@@locale": "en",
+  "appTitle": "BGnius VITA",
+  "@appTitle": {
+    "description": "Application name"
+  },
+  "loginTitle": "Welcome",
+  "@loginTitle": {
+    "description": "Login screen title"
+  },
+  "loginEmailHint": "Email",
+  "@loginEmailHint": {
+    "description": "Email field placeholder"
+  },
+  "loginPasswordHint": "Password",
+  "@loginPasswordHint": {
+    "description": "Password field placeholder"
+  },
+  "loginShowPassword": "Show",
+  "@loginShowPassword": {
+    "description": "Show password button text"
+  },
+  "loginHidePassword": "Hide",
+  "@loginHidePassword": {
+    "description": "Hide password button text"
+  },
+  "loginRememberMe": "Remember me",
+  "@loginRememberMe": {
+    "description": "Remember me checkbox text"
+  },
+  "loginForgotPassword": "Forgot my password",
+  "@loginForgotPassword": {
+    "description": "Forgot password link text"
+  },
+  "loginButton": "Sign In",
+  "@loginButton": {
+    "description": "Login button text"
+  },
+  "loginCreateAccount": "Create Account",
+  "@loginCreateAccount": {
+    "description": "Register button text"
+  },
+  "loginLibraryLink": "Library",
+  "@loginLibraryLink": {
+    "description": "Component library link (dev)"
+  },
+  "loginSuccess": "Welcome to BGnius VITA",
+  "@loginSuccess": {
+    "description": "Success message after login"
+  },
+  "loginInvalidCredentials": "Invalid email or password",
+  "@loginInvalidCredentials": {
+    "description": "Error message for invalid credentials"
+  },
+  "validationRequiredField": "This field is required",
+  "@validationRequiredField": {
+    "description": "Message when required field is empty"
+  },
+  "validationInvalidEmail": "Invalid email format",
+  "@validationInvalidEmail": {
+    "description": "Message when email format is invalid"
+  },
+  "validationPasswordRequired": "Password is required",
+  "@validationPasswordRequired": {
+    "description": "Message when password field is empty"
+  },
+  "generalError": "An unexpected error occurred",
+  "@generalError": {
+    "description": "Generic error message"
+  },
+  "generalLoading": "Loading...",
+  "@generalLoading": {
+    "description": "Loading state text"
+  },
+  "validationEmailRequired": "Email is required",
+  "@validationEmailRequired": {
+    "description": "Message when email field is empty"
+  },
+  "validationPasswordMinLength": "Password must be at least 8 characters",
+  "@validationPasswordMinLength": {
+    "description": "Message when password is too short"
+  },
+  "validationPasswordUppercase": "Must contain at least one uppercase letter",
+  "@validationPasswordUppercase": {
+    "description": "Message when uppercase letter is missing"
+  },
+  "validationPasswordLowercase": "Must contain at least one lowercase letter",
+  "@validationPasswordLowercase": {
+    "description": "Message when lowercase letter is missing"
+  },
+  "validationPasswordNumber": "Must contain at least one number",
+  "@validationPasswordNumber": {
+    "description": "Message when number is missing"
+  },
+  "validationPasswordSymbol": "Must contain at least one special symbol",
+  "@validationPasswordSymbol": {
+    "description": "Message when special symbol is missing"
+  },
+  "validationPasswordsNoMatch": "Passwords do not match",
+  "@validationPasswordsNoMatch": {
+    "description": "Message when passwords don't match"
+  },
+  "validationConfirmPassword": "Confirm your password",
+  "@validationConfirmPassword": {
+    "description": "Message when password confirmation is missing"
+  },
+  "registerTitle": "Create User",
+  "registerNameLabel": "Name",
+  "registerNameHint": "Full name",
+  "registerEmailLabel": "Email",
+  "registerEmailHint": "you@email.com",
+  "registerAddressLabel": "Address",
+  "registerAddressHint": "123 Street",
+  "registerCountryLabel": "Country",
+  "registerCountryHint": "Select country",
+  "registerLanguageLabel": "Language",
+  "registerLanguageHint": "Select language",
+  "registerPasswordLabel": "Password",
+  "registerPasswordHint": "Minimum 8 characters",
+  "registerConfirmPasswordLabel": "Repeat Password",
+  "registerConfirmPasswordHint": "Confirm your password",
+  "registerPhonePrefixLabel": "Prefix",
+  "registerPhoneLabel": "Phone",
+  "registerPhoneHint": "3001234567",
+  "registerAcceptTerms": "I accept terms and conditions",
+  "registerButton": "Link User",
+  "registerAlreadyHaveAccount": "Already have an account? ",
+  "registerLoginLink": "Login",
+  "registerErrorTerms": "You must accept terms and conditions",
+  "registerErrorPasswordMismatch": "Passwords do not match",
+  "registerSuccess": "Account created successfully",
+  "registerError": "Error creating account",
+  "forgotPasswordTitle": "Reset Password",
+  "forgotPasswordEmailHint": "Email/User",
+  "forgotPasswordGetCodeButton": "Get temporary code",
+  "forgotPasswordTimeRemaining": "Time remaining",
+  "forgotPasswordTimeRemainingOf": "of temporary password",
+  "forgotPasswordNewPasswordHint": "New Password",
+  "forgotPasswordRepeatPasswordHint": "Repeat New Password",
+  "forgotPasswordCodeHint": "Enter temporary code",
+  "forgotPasswordResetButton": "Reset Password",
+  "forgotPasswordErrorEmail": "Enter your email",
+  "forgotPasswordCodeSent": "Code sent to {email}",
+  "@forgotPasswordCodeSent": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "forgotPasswordErrorPasswordMismatch": "Passwords do not match",
+  "forgotPasswordSuccess": "Password reset successfully",
+  "deviceInfoTitle": "Device Information",
+  "deviceAddTitle": "Add Device",
+  "deviceScanBtn": "Scan QR / Wifi",
+  "deviceFormNameLabel": "Name *",
+  "deviceFormLocationLabel": "Location *",
+  "deviceFormSerialLabel": "Serial Number *",
+  "deviceFormMacLabel": "MAC Address *",
+  "deviceFormProgressTitle": "Form Progress",
+  "deviceFormProgressCount": "{completed} of 7 sections",
+  "@deviceFormProgressCount": {
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      }
+    }
+  },
+  "deviceFormSectionBasic": "Basic Information",
+  "deviceFormSectionId": "Identification",
+  "deviceFormSectionConfig": "Operational Config",
+  "deviceFormSectionPhysical": "Physical Info",
+  "deviceFormSectionMaintenance": "Maintenance",
+  "deviceFormSectionVita": "VITA Config",
+  "deviceFormNamePlaceholder": "Device Name",
+  "deviceFormLocationPlaceholder": "Select Location",
+  "deviceFormDescriptionLabel": "Description",
+  "deviceFormDescriptionPlaceholder": "Description (optional)",
+  "deviceFormModelLabel": "Model *",
+  "deviceFormModelPlaceholder": "Select Model",
+  "deviceFormSubmitCreate": "Create Device",
+  "deviceFormSubmitUpdate": "Save Changes",
+  "deviceFormCancel": "Cancel",
+  "deviceFormErrorRequired": "Please complete all required fields",
+  "deviceFormErrorLocation": "Select a location",
+  "deviceFormErrorModel": "Select a model",
+  "deviceFormErrorSave": "Error saving: {error}",
+  "deviceFormStatusLabel": "Status",
+  "deviceFormStatusPlaceholder": "Select status",
+  "deviceFormTypeLabel": "Device Type",
+  "deviceFormTypePlaceholder": "Select type",
+  "deviceFormPhotoLabel": "Device Photo",
+  "deviceFormPhotoHint": "Tap to add a photo",
+  "deviceInfoSignalStrength": "{percentage}% signal",
+  "@deviceInfoSignalStrength": {
+    "placeholders": {
+      "percentage": {
+        "type": "int"
+      }
+    }
+  },
+  "deviceInfoSecondsValue": "{seconds} sec",
+  "groupsStatusReady": "Ready",
+  "groupsErrorSelectGroupFirst": "Select a group first",
+  "groupsErrorTodosReadonly": "Cannot manually add devices to ALL group",
+  "groupsErrorSelectDeviceAdd": "Select a device to add",
+  "groupsErrorDeviceAlreadyInGroup": "Device is already in this group",
+  "groupsSuccessDeviceAdded": "Device \"{deviceName}\" added to {groupName}",
+  "@groupsSuccessDeviceAdded": {
+    "placeholders": {
+      "deviceName": {
+        "type": "String"
+      },
+      "groupName": {
+        "type": "String"
+      }
+    }
+  },
+  "groupsTitle": "Groups Management",
+  "groupsSubtitleDevicesInGroup": "Devices in this group",
+  "groupsControlPrefix": "Control: {deviceName}",
+  "@groupsControlPrefix": {
+    "placeholders": {
+      "deviceName": {
+        "type": "String"
+      }
+    }
+  },
+  "groupsButtonMoreDetails": "More details and settings",
+  "groupsSubtitleAddMore": "Add more devices",
+  "groupsDropdownHint": "Select to add...",
+  "groupsDropdownEmpty": "No devices available",
+  "groupsButtonAdd": "Add to this group",
+  "groupsInfoTodosTitle": "Automatic Group \"ALL\"",
+  "groupsInfoTodosBody": "This group automatically includes all your devices. You cannot manually add or remove devices here.",
+  "groupsEmptyList": "No devices in this group",
+  "groupCreateTitle": "Create New Group",
+  "groupEditTitle": "Edit Group",
+  "groupNameLabel": "Group Name",
+  "groupDescLabel": "Description (Optional)",
+  "groupDeleteConfirmTitle": "Delete Group?",
+  "groupDeleteConfirmBody": "This action cannot be undone.",
+  "deviceRemoveConfirmTitle": "Remove Device?",
+  "deviceRemoveConfirmBody": "Are you sure you want to remove this device from the group?",
+  "groupsBtnCancel": "Cancel",
+  "groupsBtnCreate": "Create",
+  "groupsBtnSave": "Save",
+  "groupsBtnRemove": "Remove",
+  "groupsBtnDelete": "Delete",
+  "groupsTitleSimple": "Groups",
+  "groupsButtonCreateAction": "Create Group",
+  "groupsSubsectionDevices": "Devices",
+  "groupsSuccessCreated": "Group created successfully",
+  "groupsSuccessUpdated": "Group updated",
+  "groupsSuccessDeleted": "Group deleted",
+  "groupsSuccessDeviceRemoved": "Device removed from group",
+  "generalRetry": "Retry",
+  "provisioningScanTitle": "Scanning for Devices",
+  "provisioningScanSubtitle": "Ensure your device is in setup mode (LED blinking).",
+  "provisioningScanningText": "Scanning...",
+  "provisioningDeviceFound": "Device Detected",
+  "provisioningConnectBtn": "Connect",
+  "provisioningWifiTitle": "Connect to Wi-Fi",
+  "provisioningWifiSubtitle": "Enter credentials for the device.",
+  "provisioningSsidLabel": "Network Name (SSID)",
+  "provisioningPasswordLabel": "Wi-Fi Password",
+  "provisioningSendBtn": "Send Configuration",
+  "provisioningSuccessTitle": "Configuration Successful!",
+  "provisioningSuccessBody": "Device connected successfully.",
+  "provisioningManualModeBtn": "Not showing up? Manual Setup (AP)",
+  "provisioningErrorConnection": "Could not connect to device",
+  "provisioningErrorWifi": "Incorrect password or Wi-Fi not found",
+  "devicesListTitle": "Devices",
+  "devicesTabDevices": "Devices",
+  "devicesTabOthers": "Others",
+  "deviceStatusOpening": "Opening...",
+  "deviceStatusClosing": "Closing...",
+  "deviceStatusPaused": "Paused",
+  "deviceStatusPedestrianActive": "Pedestrian Mode Active",
+  "deviceStatusReady": "Ready",
+  "deviceAutoCloseCountdown": "Auto-close in: {seconds} s",
+  "@deviceAutoCloseCountdown": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "emptyListMessage": "No items",
+  "scanDevicesTitle": "Add Device",
+  "scanDeviceLabel": "Device:",
+  "scanDeviceState": "State:",
+  "scanDeviceDetail": "Detail:",
+  "scanButtonScan": "Scan",
+  "scanWifiNetworksDetected": "Wi-Fi Networks Detected",
+  "scanVitaDevicesAvailable": "VITA'S available",
+  "scanVitaDevices": "VITA Devices",
+  "scanSerialNumberHint": "Link by Serial Number",
+  "scanSerialNumberLabel": "Serial Number",
+  "scanButtonAdd": "Add",
+  "scanCompletedMessage": "Scan completed - {count} networks found",
+  "@scanCompletedMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "scanSelectDeviceError": "Select a VITA device or enter a serial number",
+  "scanDeviceAddedSuccess": "Device {deviceId} added",
+  "@scanDeviceAddedSuccess": {
+    "placeholders": {
+      "deviceId": {
+        "type": "String"
+      }
+    }
+  },
+  "parametersTitle": "Device\nParameters",
+  "parametersDeviceLabel": "Device:",
+  "parametersModelLabel": "Model:",
+  "parametersSerialLabel": "Serial No:",
+  "parametersStateLabel": "State:",
+  "parametersDetailLabel": "Detail:",
+  "parametersConfigSection": "Config Parameters:",
+  "parametersNotificationsSection": "Notifications Config:",
+  "parametersAutoClose": "Auto Close",
+  "parametersCourtesyLight": "Courtesy Light",
+  "parametersAutoCloseTime": "Time before auto-closing",
+  "parametersLockDevice": "Lock Device",
+  "parametersKeepOpen": "Keep Open",
+  "parametersDisconnectionReminder": "Disconnection Reminder",
+  "parametersOpenDoorReminder": "Open Door Reminder",
+  "parametersForcedOpeningAlarm": "Forced Opening Alarm",
+  "parametersPhotocellBlocked": "Photocell Blocked",
+  "parametersOpeningNotAllowed": "Opening Not Allowed",
+  "parametersUpdateAvailable": "Update Available",
+  "parametersMaintenanceRequest": "Maintenance Request",
+  "parametersOpenDoorReminderTime": "Open Door Reminder Time",
+  "parametersConnectionFailureTime": "Connection Failure Time",
+  "parametersPhotocellBlockedTime": "Photocell Blocked Time",
+  "parametersUpdateButton": "Update Parameters",
+  "parametersUpdatedSuccess": "Parameters updated successfully",
+  "settingsTitle": "Settings",
+  "settingsSelectCountry": "Select Country",
+  "settingsSelectLanguage": "Select Language",
+  "settingsSelectEnvironment": "Select Environment",
+  "settingsCountryCostaRica": "Costa Rica",
+  "settingsCountryMexico": "Mexico",
+  "settingsCountrySpain": "Spain",
+  "settingsLanguageSpanish": "Español",
+  "settingsLanguageEnglish": "English",
+  "settingsEnvironmentProduction": "Production",
+  "settingsEnvironmentStaging": "Staging",
+  "settingsEnvironmentDevelopment": "Development",
+  "settingsProfileSection": "User Profile",
+  "settingsAppearanceSection": "Appearance",
+  "settingsAccessibilitySection": "Accessibility",
+  "settingsSecuritySection": "Security",
+  "settingsServerSection": "Server Configuration",
+  "settingsInfoSection": "Information",
+  "settingsFieldName": "Name",
+  "settingsFieldPhone": "Phone",
+  "settingsFieldEmail": "Email",
+  "settingsFieldAddress": "Address",
+  "settingsFieldCountry": "Country",
+  "settingsFieldLanguage": "Language",
+  "settingsDarkMode": "Dark Mode",
+  "settingsFontSize": "Font Size",
+  "settingsHighContrast": "High Contrast",
+  "settingsReduceMotion": "Reduce Motion",
+  "settingsCurrentPassword": "Current Password",
+  "settingsNewPassword": "New Password",
+  "settingsRepeatPassword": "Repeat Password",
+  "settingsBiometrics": "Enable Biometrics",
+  "settingsBiometricsSubtitle": "Use fingerprint or face to sign in",
+  "settingsEnvironment": "Environment",
+  "settingsServerUrl": "Server URL",
+  "settingsAppVersion": "App Version",
+  "settingsTermsConditions": "Terms and Conditions",
+  "settingsPrivacyPolicy": "Privacy Policy",
+  "settingsSaveChanges": "Save Changes",
+  "settingsChangeButton": "Change",
+  "settingsChangePhoto": "Change photo",
+  "settingsPhotoCamera": "Camera",
+  "settingsPhotoGallery": "Gallery",
+  "settingsPhotoRemove": "Remove photo",
+  "settingsPhotoUpdated": "Profile photo updated",
+  "settingsPhotoRemoved": "Profile photo removed",
+  "settingsUpdatedSuccess": "Settings updated successfully",
+  "bottomNavDevices": "Devices",
+  "msgInvalidCredentials": "Invalid email or password",
+  "msgSessionExpired": "Your session has expired",
+  "msgEmailAlreadyExists": "This email is already registered",
+  "msgPasswordMismatch": "Passwords do not match",
+  "msgLoginSuccess": "Welcome to BGnius VITA",
+  "msgRegisterSuccess": "Account created successfully",
+  "msgLogoutSuccess": "Session closed",
+  "msgPasswordResetSent": "A link has been sent to your email",
+  "msgDeviceNotFound": "Device not found",
+  "msgDeviceOffline": "Device is offline",
+  "msgCommandFailed": "Could not execute command",
+  "msgDeviceAdded": "Device added successfully",
+  "msgDeviceUpdated": "Device updated",
+  "msgDeviceDeleted": "Device deleted",
+  "msgCommandSuccess": "Command executed successfully",
+  "msgUserNotFound": "User not found",
+  "msgUserAdded": "User added successfully",
+  "msgUserUpdated": "User updated",
+  "msgUserDeleted": "User deleted",
+  "msgPermissionGranted": "Permission granted",
+  "msgPermissionRevoked": "Permission revoked",
+  "msgUserLinked": "User linked successfully",
+  "msgGroupCreated": "Group created successfully",
+  "msgGroupUpdated": "Group updated",
+  "msgGroupDeleted": "Group deleted",
+  "msgDeviceAddedToGroup": "Device added to group",
+  "msgDeviceRemovedFromGroup": "Device removed from group",
+  "msgRequiredField": "This field is required",
+  "msgInvalidFormat": "Invalid format entered",
+  "msgServerError": "Server error occurred",
+  "msgConnectionError": "Could not connect to server",
+  "msgUnknownError": "An unexpected error occurred",
+  "msgNoData": "No data available",
+  "msgLoading": "Loading...",
+  "msgRetry": "Retry",
+  "msgCancel": "Cancel",
+  "msgAccept": "Accept",
+  "msgSave": "Save",
+  "msgDelete": "Delete",
+  "msgEdit": "Edit",
+  "msgAdd": "Add",
+  "msgConfirm": "Confirm",
+  "msgYes": "Yes",
+  "msgNo": "No",
+  "msgConfirmDelete": "Are you sure you want to delete this item?",
+  "msgConfirmDeleteDevice": "Do you want to delete this device?",
+  "msgConfirmDeleteUser": "Do you want to delete this user?",
+  "msgConfirmLogout": "Do you want to sign out?",
+  "msgCannotUndo": "This action cannot be undone",
+  "msgMinPasswordLength": "Password must be at least 8 characters",
+  "msgInvalidEmail": "Invalid email format",
+  "msgInvalidPhone": "Invalid phone format",
+  "msgInvalidSerialNumber": "Invalid serial number",
+  "navDevices": "Devices",
+  "navGroups": "Groups",
+  "navUsers": "Users",
+  "navSettings": "Settings",
+  "sharedUsersTitle": "Registered\nUsers",
+  "sharedUsersDeviceLabel": "Device:",
+  "sharedUsersModelLabel": "Model:",
+  "sharedUsersSerialLabel": "Serial No:",
+  "sharedUsersStatusLabel": "Status:",
+  "sharedUsersDetailLabel": "Detail:",
+  "sharedUsersSearchHint": "Search user",
+  "sharedUsersEmptyList": "No registered users",
+  "sharedUsersLinkButton": "Link User",
+  "deviceEditTitle": "Edit Device",
+  "deviceEditSuccessMessage": "Device updated successfully",
+  "deviceEditErrorLoading": "Error loading",
+  "deviceControlTitle": "Device Detail",
+  "deviceControlButtonOpen": "Open",
+  "deviceControlButtonPause": "Pause",
+  "deviceControlButtonClose": "Close",
+  "deviceControlButtonPedestrian": "Pedestrian",
+  "deviceControlButtonLock": "Lock",
+  "deviceControlButtonLight": "Light",
+  "deviceControlButtonSwitch": "Switch",
+  "deviceControlStatusOpening": "Opening gate...",
+  "deviceControlStatusPausing": "Pausing...",
+  "deviceControlStatusClosing": "Closing gate...",
+  "deviceControlStatusPedestrian": "Pedestrian opening...",
+  "deviceControlStatusLocked": "Device Locked",
+  "deviceControlStatusLightOn": "Light on",
+  "deviceControlStatusSwitchActive": "Switch activated",
+  "deviceControlAutoCloseCountdown": "Auto-close in: {seconds} s",
+  "deviceControlLinkEdit": "Edit Device",
+  "deviceControlLinkUsers": "Users with Access",
+  "deviceControlLinkParams": "Parameters",
+  "deviceControlLinkEvents": "Event Log",
+  "deviceControlLinkContact": "Technical Contact",
+  "deviceControlLinkInfo": "Device Information",
+  "technicalContactTitle": "Technical Contact",
+  "technicalContactDeviceLabel": "Device:",
+  "technicalContactModelLabel": "Model:",
+  "technicalContactSerialLabel": "Serial No:",
+  "technicalContactStatusLabel": "Status:",
+  "technicalContactDetailLabel": "Detail:",
+  "technicalContactTechDataTitle": "Technician Data",
+  "technicalContactNameHint": "Username",
+  "technicalContactEmailHint": "Email",
+  "technicalContactCountryHint": "Country",
+  "technicalContactPhoneHint": "Phone",
+  "technicalContactAiDescription": "Our AI periodically reviews your automation, analyzes its performance and detects possible signs of wear or failures. Based on this, it informs you when your system needs maintenance.",
+  "technicalContactAiPermissionText": "Allow AI to inform me when maintenance is required.",
+  "technicalContactNotesTitle": "Notes",
+  "technicalContactDeleteButton": "Delete",
+  "technicalContactSaveButton": "Save",
+  "technicalContactDeleteDialogTitle": "Delete Contact",
+  "technicalContactDeleteDialogContent": "Are you sure you want to delete this technical contact?",
+  "technicalContactCancelButton": "Cancel",
+  "technicalContactSaveSuccess": "Technical contact saved successfully",
+  "technicalContactDeleteSuccess": "Technical contact deleted",
+  "technicalContactMaintenanceInfo": "Contacting maintenance - Coming soon",
+  "linkVirtualUserTitle": "Link virtual user",
+  "linkVirtualUserEmailLabel": "Email/User",
+  "linkVirtualUserEmailHint": "Email/User",
+  "linkVirtualUserLabelLabel": "Label",
+  "linkVirtualUserLabelHint": "Label",
+  "linkVirtualUserAddButton": "Add User to List",
+  "linkVirtualUserNewUserName": "New User",
+  "linkVirtualUserErrorEmail": "Please enter email or user",
+  "linkVirtualUserSuccess": "User added. Configure permissions.",
+  "deviceControlSimpleTitle": "Controls",
+  "deviceControlLocationTitle": "Location",
+  "deviceControlDescriptionTitle": "Description",
+  "deviceControlStatusTitle": "Status",
+  "usersScreenTitle": "Users with Access",
+  "usersScreenDeviceLabel": "Device:",
+  "usersScreenModelLabel": "Model:",
+  "usersScreenSerialLabel": "Serial No:",
+  "usersScreenStatusLabel": "Status:",
+  "usersScreenDetailLabel": "Detail:",
+  "usersScreenAvailableUsersTitle": "Available Users:",
+  "usersScreenLinkButton": "Link Existing User",
+  "usersScreenErrorSelectUsers": "Select at least one user",
+  "usersScreenSuccessLinked": "{count} user(s) linked successfully",
+  "usersScreenEditInfo": "Edit {name} - Coming soon",
+  "userAccessScreenTitle": "Users with Access",
+  "userAccessDeviceLabel": "Device:",
+  "userAccessModelLabel": "Model:",
+  "userAccessSerialLabel": "Serial No:",
+  "userAccessStatusLabel": "Status:",
+  "userAccessDetailLabel": "Detail:",
+  "userAccessLinkedUsersTitle": "Currently Linked Users",
+  "userAccessLinkedUsersDesc": "These users can already access this device",
+  "userAccessAvailableUsersTitle": "Users Available for Linking",
+  "userAccessAvailableUsersDesc": "Select users to give them access to this device",
+  "userAccessSearchHint": "Search user...",
+  "userAccessTooltipAdmin": "Administrator",
+  "userAccessTooltipUnlink": "Unlink",
+  "userAccessEditButton": "Edit",
+  "userAccessErrorAdminUnlink": "You cannot unlink the administrator",
+  "userAccessErrorSelectUsers": "Select at least one user",
+  "userAccessUnlinkDialogTitle": "Unlink User",
+  "userAccessUnlinkDialogContent": "Do you want to unlink {name}?",
+  "userAccessCancelButton": "Cancel",
+  "userAccessUnlinkButton": "Unlink",
+  "userAccessSuccessUnlinked": "{name} unlinked",
+  "userAccessSuccessLinked": "{count} user(s) linked successfully",
+  "userAccessEditInfo": "Edit {name} - Coming soon",
+  "userAccessLinkButtonSingle": "Link Existing User ({count})",
+  "userAccessLinkButtonPlural": "Link Existing Users ({count})",
+  "userRolesTitle": "User roles\nin device",
+  "userRolesDeviceLabel": "Device:",
+  "userRolesModelLabel": "Model:",
+  "userRolesSerialLabel": "Serial No:",
+  "userRolesStatusLabel": "Status:",
+  "userRolesDetailLabel": "Detail:",
+  "userRolesSelectedUserLabel": "Selected User",
+  "userRolesEmailLabel": "Email",
+  "userRolesNewUserDefault": "New User",
+  "userRolesPermissionsTitle": "Permissions and Roles",
+  "userRolesAssignButton": "Assign Roles",
+  "userRolesPermissionOpen": "Open",
+  "userRolesPermissionClose": "Close",
+  "userRolesPermissionPause": "Stop/Pause",
+  "userRolesPermissionPedestrian": "Pedestrian",
+  "userRolesPermissionLock": "Lock",
+  "userRolesPermissionLight": "Light",
+  "userRolesPermissionSwitch": "Relay/Switch",
+  "userRolesPermissionControlPanel": "Control Panel",
+  "userRolesPermissionReports": "Reports",
+  "userRolesPermissionViewContact": "View Contact",
+  "userRolesPermissionViewParams": "View Parameters",
+  "userRolesPermissionEditDevice": "Edit Device",
+  "userRolesPermissionAssignUsers": "Assign Users",
+  "userRolesErrorNoPermissions": "Select at least one permission",
+  "userRolesSuccessAssigned": "Roles assigned and user linked successfully",
+  "userRolesErrorUnknownDevice": "Could not link: Unknown device",
+  "deviceFormGallery": "Gallery",
+  "deviceFormCamera": "Camera",
+  "deviceFormDeletePhoto": "Delete Photo",
+  "deviceFormDeleteDevice": "Delete Device",
+  "generalDelete": "Delete",
+  "deviceFormDeleteConfirmMessage": "Are you sure you want to delete this device and all its associated data? This action cannot be undone.",
+  "deviceFormSelectImage": "Select Image",
+  "deviceFormTakePhoto": "Take Photo",
+  "deviceFormImageLoadedSuccess": "Image loaded successfully",
+  "deviceFormImageLoadError": "Error loading image: {error}",
+  "@deviceFormImageLoadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceFormDeletedSuccess": "Device deleted successfully",
+  "blePairingTitle": "BLE Pairing",
+  "@blePairingTitle": {
+    "description": "Title of the BLE pairing screen"
+  },
+  "bleScanStepTitle": "Scan devices",
+  "bleScanStepDescription": "Search for nearby VITA devices. Make sure the device is in pairing mode (blue LED blinking).",
+  "bleScanButtonStart": "Start scanning",
+  "bleScanningText": "Scanning devices...",
+  "bleDeviceListStepTitle": "Select device",
+  "bleDeviceListFound": "Found {count} devices",
+  "@bleDeviceListFound": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bleConnectionStepTitle": "Connecting",
+  "bleConnectingText": "Connecting to device...",
+  "bleDeviceInfoTitle": "Device information",
+  "bleConfigureButton": "Configure",
+  "bleConfigStepTitle": "Configuration",
+  "bleConfigStepDescription": "Set up the initial data for your VITA device.",
+  "bleConfigDeviceNameLabel": "Device name",
+  "bleConfigDeviceNameHint": "Ex: Main Gate",
+  "bleConfigLocationLabel": "Location",
+  "bleConfigLocationHint": "Ex: Main entrance",
+  "bleConfigDescriptionLabel": "Description",
+  "bleConfigDescriptionHint": "Additional description (optional)",
+  "bleConfigDeviceTypeLabel": "Device type",
+  "bleConfigTypeGate": "Gate",
+  "bleConfigTypeDoor": "Door",
+  "bleConfigTypeBarrier": "Barrier",
+  "bleConfigSaveButton": "Save configuration",
+  "bleConfigDeviceNameRequired": "Device name is required",
+  "bleConfiguringText": "Configuring device...",
+  "bleSuccessStepTitle": "Completed",
+  "bleSuccessMessage": "Device paired successfully!",
+  "bleSuccessDeviceConfigured": "Device '{deviceName}' has been configured correctly.",
+  "@bleSuccessDeviceConfigured": {
+    "placeholders": {
+      "deviceName": {
+        "type": "String"
+      }
+    }
+  },
+  "bleSuccessGoToDevices": "Go to my devices",
+  "bleInfoSerial": "Serial No.",
+  "bleInfoFirmware": "Firmware",
+  "bleInfoModel": "Model",
+  "bleInfoMotor": "Motor",
+  "bleErrorGeneric": "Error during pairing process",
+  "notificationsTitle": "Notifications",
+  "@notificationsTitle": {
+    "description": "Title of the notifications screen"
+  },
+  "markAllAsRead": "Mark all as read",
+  "@markAllAsRead": {
+    "description": "Text of the button to mark all notifications as read"
+  },
+  "noNotifications": "No notifications",
+  "@noNotifications": {
+    "description": "Message when there are no notifications"
+  },
+  "minutesAgo": "{minutes}m ago",
+  "@minutesAgo": {
+    "description": "Text to show elapsed time in minutes",
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "hoursAgo": "{hours}h ago",
+  "@hoursAgo": {
+    "description": "Text to show elapsed time in hours",
+    "placeholders": {
+      "hours": {
+        "type": "String"
+      }
+    }
+  },
+  "daysAgo": "{days}d ago",
+  "@daysAgo": {
+    "description": "Text to show elapsed time in days",
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "justNow": "Just now",
+  "@justNow": {
+    "description": "Text to show that something happened very recently"
+  },
+  "deviceOffline": "Device offline",
+  "@deviceOffline": {
+    "description": "Text for device offline notification"
+  },
+  "deviceOnline": "Device online",
+  "@deviceOnline": {
+    "description": "Text for device online notification"
+  },
+  "actionExecuted": "Action executed",
+  "@actionExecuted": {
+    "description": "Text for action executed notification"
+  },
+  "statusChange": "Status change",
+  "@statusChange": {
+    "description": "Text for status change notification"
+  },
+  "notificationPreferences": "Notification Preferences",
+  "@notificationPreferences": {
+    "description": "Title of the notification preferences screen"
+  },
+  "notificationPreferencesDescription": "Configure which notifications you want to receive for each device",
+  "@notificationPreferencesDescription": {
+    "description": "Description of the notification preferences screen"
+  },
+  "notificationTypes": "Notification types",
+  "@notificationTypes": {
+    "description": "Title of the notification types section"
+  },
+  "notifyActions": "Notify actions",
+  "@notifyActions": {
+    "description": "Option to notify when actions are executed"
+  },
+  "notifyActionsDescription": "When someone operates the device",
+  "@notifyActionsDescription": {
+    "description": "Description of the notify actions option"
+  },
+  "notifyOffline": "Notify offline",
+  "@notifyOffline": {
+    "description": "Option to notify when device goes offline"
+  },
+  "notifyOfflineDescription": "When the device goes offline",
+  "@notifyOfflineDescription": {
+    "description": "Description of the notify offline option"
+  },
+  "notifyStatusChange": "Notify status changes",
+  "@notifyStatusChange": {
+    "description": "Option to notify motor status changes"
+  },
+  "notifyStatusChangeDescription": "When motor status changes",
+  "@notifyStatusChangeDescription": {
+    "description": "Description of the notify status changes option"
+  },
+  "retry": "Retry",
+  "@retry": {
+    "description": "Text of the button to retry an operation"
+  },
+  "activationDateLabel": "Activation date",
+  "@activationDateLabel": {
+    "description": "Label for activation date field"
+  },
+  "favoriteDeviceLabel": "Favorite Device",
+  "@favoriteDeviceLabel": {
+    "description": "Label for favorite device switch"
+  },
+  "selectDatePlaceholder": "Select date",
+  "@selectDatePlaceholder": {
+    "description": "Placeholder text for date selection"
+  },
+  "changePhotoButton": "Change",
+  "@changePhotoButton": {
+    "description": "Text for change photo button"
+  },
+  "deleteDeviceButton": "Delete Device",
+  "@deleteDeviceButton": {
+    "description": "Text for delete device button"
+  },
+  "serialNumberPlaceholder": "SN...",
+  "@serialNumberPlaceholder": {
+    "description": "Placeholder for serial number input"
+  },
+  "searchPlaceholder": "Search...",
+  "@searchPlaceholder": {
+    "description": "Default search placeholder text"
+  },
+  "confirmDefault": "Confirm",
+  "@confirmDefault": {
+    "description": "Default confirm button text"
+  },
+  "cancelDefault": "Cancel",
+  "@cancelDefault": {
+    "description": "Default cancel button text"
+  },
+  "groupNotFound": "Group not found",
+  "@groupNotFound": {
+    "description": "Error message when group is not found"
+  },
+  "cannotAddToAllGroup": "Cannot manually add devices to ALL group",
+  "@cannotAddToAllGroup": {
+    "description": "Error message when trying to add devices to ALL group manually"
+  },
+  "deviceAlreadyInGroup": "Device is already in the group",
+  "@deviceAlreadyInGroup": {
+    "description": "Error message when device is already in the group"
+  },
+  "cannotRemoveFromAllGroup": "Cannot remove devices from ALL group",
+  "@cannotRemoveFromAllGroup": {
+    "description": "Error message when trying to remove devices from ALL group"
+  },
+  "deviceNotInGroup": "Device is not in the group",
+  "@deviceNotInGroup": {
+    "description": "Error message when device is not in the group"
+  },
+  "nameCannotBeEmpty": "Name cannot be empty",
+  "@nameCannotBeEmpty": {
+    "description": "Error message when name field is empty"
+  },
+  "groupNameAlreadyExists": "A group with this name already exists",
+  "@groupNameAlreadyExists": {
+    "description": "Error message when group name already exists"
+  },
+  "cannotModifyAllGroup": "Cannot modify ALL group",
+  "@cannotModifyAllGroup": {
+    "description": "Error message when trying to modify ALL group"
+  },
+  "cannotDeleteAllGroup": "Cannot delete ALL group",
+  "@cannotDeleteAllGroup": {
+    "description": "Error message when trying to delete ALL group"
+  },
+  "powerTypeLabel": "Power Type",
+  "@powerTypeLabel": {
+    "description": "Label for power type field"
+  },
+  "motorTypeLabel": "Motor Type",
+  "@motorTypeLabel": {
+    "description": "Label for motor type field"
+  },
+  "selectPlaceholder": "Select",
+  "@selectPlaceholder": {
+    "description": "Generic select placeholder text"
+  },
+  "openingPhotocellLabel": "Opening Photocell",
+  "@openingPhotocellLabel": {
+    "description": "Label for opening photocell switch"
+  },
+  "closingPhotocellLabel": "Closing Photocell",
+  "@closingPhotocellLabel": {
+    "description": "Label for closing photocell switch"
+  },
+  "installationDateLabel": "Installation Date",
+  "@installationDateLabel": {
+    "description": "Label for installation date"
+  },
+  "warrantyExpirationLabel": "Warranty Expiration",
+  "@warrantyExpirationLabel": {
+    "description": "Label for warranty expiration date"
+  },
+  "scheduledMaintenanceLabel": "Scheduled Maintenance",
+  "@scheduledMaintenanceLabel": {
+    "description": "Label for scheduled maintenance date"
+  },
+  "technicianNamePlaceholder": "Technician name...",
+  "@technicianNamePlaceholder": {
+    "description": "Placeholder for technician name field"
+  },
+  "technicalContactLabel": "Technical Contact",
+  "@technicalContactLabel": {
+    "description": "Label for technical contact field"
+  },
+  "additionalNotesPlaceholder": "Additional notes...",
+  "@additionalNotesPlaceholder": {
+    "description": "Placeholder for additional notes field"
+  },
+  "maintenanceNotesLabel": "Maintenance Notes",
+  "@maintenanceNotesLabel": {
+    "description": "Label for maintenance notes field"
+  },
+  "deviceAllDetailsTitle": "All Details",
+  "deviceInfoActivationDateLabel": "Activation Date:",
+  "deviceInfoAutoCloseLabel": "Auto-close:",
+  "deviceInfoAutoLampLabel": "Auto-On Lamp:",
+  "deviceInfoClosingPhotocellLabel": "Closing Photocell:",
+  "deviceInfoCustomPhoto": "Custom",
+  "deviceInfoDefaultPhoto": "Default",
+  "deviceInfoDescriptionLabel": "Description:",
+  "deviceInfoEmergencyModeLabel": "Emergency Mode:",
+  "deviceInfoFavoriteLabel": "Favorite:",
+  "deviceInfoFwVersionLabel": "Firmware Version:",
+  "deviceInfoGroupLabel": "Group:",
+  "deviceInfoHwVersionLabel": "Hardware Version:",
+  "deviceInfoInstallationDateLabel": "Installation Date:",
+  "deviceInfoLockedLabel": "Locked:",
+  "deviceInfoMacLabel": "MAC Address:",
+  "deviceInfoMaintNotesLabel": "Maintenance Notes:",
+  "deviceInfoMaintenanceModeLabel": "Maintenance Mode:",
+  "deviceInfoMaxOpenTimeLabel": "Max. Open Time:",
+  "deviceInfoModelLabel": "Model:",
+  "deviceInfoMotorTypeLabel": "Motor Type:",
+  "deviceInfoNameLabel": "Name:",
+  "deviceInfoNo": "No",
+  "deviceInfoOneMaintenance": "1 maintenance",
+  "deviceInfoOpeningPhotocellLabel": "Opening Photocell:",
+  "deviceInfoPedestrianTimeoutLabel": "Pedestrian Timeout:",
+  "deviceInfoPhotoLabel": "Photo:",
+  "deviceInfoPowerTypeLabel": "Power Type:",
+  "deviceInfoScheduledMaintLabel": "Scheduled Maintenance:",
+  "deviceInfoSecondsSuffix": " sec",
+  "deviceInfoSectionConfig": "VITA Configuration",
+  "deviceInfoSectionGeneral": "General",
+  "deviceInfoSectionIdentity": "Identification",
+  "deviceInfoSectionMaintenance": "Maintenance",
+  "deviceInfoSectionOperational": "Operational Configuration",
+  "deviceInfoSectionOther": "Others",
+  "deviceInfoSectionPhysical": "Physical Information",
+  "deviceInfoSerialLabel": "Serial No.:",
+  "deviceInfoStatusLabel": "Status",
+  "deviceInfoTechnicianLabel": "Assigned Technician:",
+  "deviceInfoTotalCyclesLabel": "Total Cycles:",
+  "deviceInfoUpdateBtn": "Update device",
+  "deviceInfoVersionLabel": "Current Version:",
+  "deviceInfoViewAllDetailsBtn": "View all details",
+  "deviceInfoWarrantyDateLabel": "Warranty Expiration:",
+  "deviceInfoYes": "Yes",
+  "eventLogDownload": "Download logs",
+  "eventLogDownloading": "Downloading {count} logs...",
+  "eventLogEmpty": "No events recorded",
+  "eventLogTitle": "Event Log",
+  "deviceOnlineStatus": "Online",
+  "deviceOfflineStatus": "Offline",
+  "deviceImageLabel": "Device gate image",
+  "mainGateLabel": "Main Gate",
+  "garageGateLabel": "Garage Gate",
+  "controlsButtonOpen": "Open",
+  "controlsButtonPause": "Pause",
+  "controlsButtonClose": "Close",
+  "controlsButtonPedestrian": "Pedestrian",
+  "modelLabel": "Model:",
+  "serialNumberLabel": "Serial No.:",
+  "detailLabel": "Detail",
+  "notificationTooltip": "Notifications",
+  "retryButton": "Retry",
+  "editButton": "Edit",
+  "showPasswordButton": "Show",
+  "hidePasswordButton": "Hide"
+}
